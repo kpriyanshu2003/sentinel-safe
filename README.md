@@ -1,3 +1,3 @@
 # Crowd-Management
 
-A crown management app for colleges, to redues inequalities and promote safer and peaceful environment for students.
+A crowd management app for colleges, to reduce inequalities and promote safer and peaceful environment for students.
