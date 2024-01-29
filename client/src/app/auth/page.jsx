@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -10,7 +9,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { useState } from "react";
-import { app } from "@/firebase.config";
+import { auth } from "@/firebase.config";
 import { useRouter } from "next/navigation";
 import GoogleButton from "react-google-button";
 
@@ -22,7 +21,6 @@ export default function Authentication() {
   const router = useRouter();
   const [signUp, setSignUp] = useState(false);
 
-  const auth = getAuth(app);
   const handleChange = (event) => {
     setInput((prevInput) => ({
       ...prevInput,
@@ -153,7 +151,7 @@ export default function Authentication() {
 
           <span
             className="mt-5 text-center text-sm text-gray-500"
-            onClick={() => setSignUp(true)}
+            onClick={() => setSignUp(!signUp)}
           >
             {signUp ? "Already have an account? " : "Don't have an account?  "}
             <span className="font-semibold leading-6 text-green-400 hover:text-green-600 cursor-pointer">
