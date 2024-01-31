@@ -1,4 +1,4 @@
-const HTML_TEMPLATE = (text) => {
+const HTML_TEMPLATE = (text: string) => {
   return `
     <!DOCTYPE html>
     <html>

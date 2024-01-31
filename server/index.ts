@@ -6,7 +6,7 @@ import morgan from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { PrismaClient } from "@prisma/client";
-import helmet from "helmet";
+// import helmet from "helmet";
 
 dotenv.config();
 const app = express();
@@ -18,7 +18,7 @@ import prismaRoutes from "./src/routes/prisma";
 
 app.use(compress());
 app.use(cors({ origin: "*" }));
-app.use(helmet());
+// app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -40,13 +40,14 @@ app.use("/", (req: Request, res: Response) => {
 
 io.on("connection", (socket) => {
   console.log(socket.id + " connected");
+
   socket.on("chatMessage", (msg) => {
     io.emit("chatMessage", msg);
   });
-});
 
-io.on("disconnect", () => {
-  console.log("user disconnected");
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
 
 httpServer.listen(port, () => {

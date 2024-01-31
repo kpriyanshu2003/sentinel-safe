@@ -2,8 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { generateOTP } from "../../api/index";
-import { verifyOTP } from "../../api/index";
+import { generateOTP } from "@/api/index";
+import { verifyOTP } from "@/api/index";
 import toast, { Toaster } from "react-hot-toast";
 import {
   signInWithEmailAndPassword,
@@ -61,6 +61,7 @@ export default function Authentication() {
   const verifyOTP = async (e) => {
     e.preventDefault();
     try {
+      console.log(OTP);
       const res = await verifyOTP(OTP);
       router.push("/dashboard");
       setClickSignUP(false);
