@@ -17,6 +17,7 @@
     "otp-generator": "^4.0.1",
     "phyrlogs": "^1.0.13",
     "prisma": "^5.8.1",
+    "socket.io": "^4.7.4",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
