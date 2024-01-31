@@ -6,7 +6,6 @@ import { generateOTP } from "../../api/index";
 import { verifyOTP } from "../../api/index";
 import toast, { Toaster } from "react-hot-toast";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
