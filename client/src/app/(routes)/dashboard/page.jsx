@@ -16,13 +16,20 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (!user) console.log("User not found");
-      else console.log(user.displayName, user.email);
+      if (!user) {
+        console.log("User not found");
+        router.push("/");
+      } else {
+        console.log(user.displayName, user.email);
+        localStorage.setItem("image", user.photoURL);
+      }
     });
   }, []);
   return (

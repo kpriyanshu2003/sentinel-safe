@@ -51,7 +51,7 @@ export const generateOTP = async (
 </div>
 `,
   };
-  console.log(email);
+
   transporter.sendMail({ ...verifyOtp, to: email as string }, (err) => {
     if (err) return next(createError(500, "Internal Server Error"));
     return res.status(200).send({ message: "OTP sent" });

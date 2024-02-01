@@ -13,6 +13,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 
 export default function Authentication() {
@@ -34,54 +35,49 @@ export default function Authentication() {
     }));
   };
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
-    signUp
-      ? generateOTP({
+    setClickSignUp(true);
+    try {
+      if (signUp) {
+        const res = await generateOTP({
           email: input.email,
           name: input.name,
-        })
-          .then((res) => {
-            console.log(res.data);
-            localStorage.setItem("email", res.data.email);
-            localStorage.setItem("name", res.data.displayName);
-            setClickSignUp(true);
-          })
-          .catch((err) => {
-            toast.error("Failed to generate OTP. Status Code 500");
-            console.log(err);
-          })
-      : signInWithEmailAndPassword(auth, input.email, input.password)
-          .then(() => {
-            router.push("/dashboard");
-          })
-          .catch((error) => {
-            toast.error("Invalid Details");
-            console.log(error.message);
-          });
+        });
+        console.log(res.data);
+      } else {
+        await signInWithEmailAndPassword(auth, input.email, input.password);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      signUp
+        ? toast.error("Failed to generate OTP. Status Code 500")
+        : toast.error("Invalid Details");
+      console.error(error.message);
+    }
   };
 
-  const vefyOTP = () => {
-    verifyOTP(OTP)
-      .then((res) => {
-        console.log(res.data);
-        createUserWithEmailAndPassword(auth, input.email, input.password)
-          .then((res) => {
-            console.log(res.user);
-          })
-          .catch((err) => {
-            console.log(err);
-            throw new Error(err);
-          });
-      })
-      .then(() => {
-        router.push("/dashboard");
-        setClickSignUp(false);
-      })
-      .catch((err) => {
-        toast.error("Invalid OTP");
-        console.log(err);
+  const verifyAndCreateUser = async () => {
+    try {
+      const res = await verifyOTP(OTP);
+      console.log(res.data);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        input.email,
+        input.password
+      );
+      console.log(userCredential.user);
+      await updateProfile(auth.currentUser, {
+        displayName: input.name,
       });
+      console.log("Update Success");
+      router.push("/dashboard");
+      setClickSignUp(false);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Invalid OTP");
+      console.error(error);
+    }
   };
 
   const handleGoogleAuth = () => {
@@ -237,7 +233,7 @@ export default function Authentication() {
             />
             <button
               className="font-semibold text-white leading-6 p-2 mt-3 rounded bg-emerald-600 hover:bg-emerald-800 cursor-pointer transition-all duration-300"
-              onClick={vefyOTP}
+              onClick={verifyAndCreateUser}
             >
               Verify OTP
             </button>

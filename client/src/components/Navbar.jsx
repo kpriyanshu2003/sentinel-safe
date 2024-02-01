@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import { useRouter } from "next/navigation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const router = useRouter();
   function handleSignOut() {
+    localStorage.removeItem("image");
     signOut(auth)
       .then(() => {
         console.log("SignOut Success");
@@ -17,6 +19,8 @@ const Navbar = () => {
         console.log("Error: ", error.message);
       });
   }
+  const image = localStorage.getItem("image");
+
   return (
     <div>
       <div className="w-screen h-14 shadow-gray-900 shadow-lg justify-between flex items-center pr-8 pl-8 text-center">
@@ -41,10 +45,19 @@ const Navbar = () => {
           >
             Log Out
           </div>
-          <div
-            className="rounded-full  w-12 h-12 border-emerald-600 border-2 bg-cover bg-center"
-            style={{ backgroundImage: "url('/avatar2.svg')" }}
-          ></div>
+
+          <div className="rounded-full w-12 h-12 border-emerald-600 border-2 bg-cover bg-center overflow-hidden">
+            {image ? (
+              <Image
+                src={image.substring(0, image.length - 1)}
+                alt="user"
+                width={100}
+                height={100}
+              />
+            ) : (
+              <AccountCircleIcon />
+            )}
+          </div>
         </div>
       </div>
     </div>
