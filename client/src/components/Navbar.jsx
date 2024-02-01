@@ -43,12 +43,11 @@ const Navbar = () => {
           onClick={() => router.push("/")}
         />
         <div className="flex gap-3 items-center">
-          <Link
-            href="/chat"
-            className="transition-all duration-300 flex items-center bg-emerald-600 justify-center cursor-pointer  rounded text-white p-2 font-bold  hover:bg-emerald-800 hover:text-white active:bg-emerald-700 h-8 "
-          >
-            Community Chat
-          </div>
+          <Link href="/chat">
+            <div className="transition-all duration-300 flex items-center bg-emerald-600 justify-center cursor-pointer  rounded text-white p-2 font-bold  hover:bg-emerald-800 hover:text-white active:bg-emerald-700 h-8 ">
+              Community Chat
+            </div>
+          </Link>
           <Popover
             id={id}
             open={open}
@@ -68,6 +67,7 @@ const Navbar = () => {
               Log Out
             </div>
           </Link>
+
           <div
             className="transition-all duration-300 flex items-center border-emerald-600 justify-center cursor-pointer border-2 rounded text-emerald-600 p-2 font-bold  hover:bg-gray-300 hover:text-black active:bg-emerald-700 h-8"
             onClick={() => handleSignOut()}

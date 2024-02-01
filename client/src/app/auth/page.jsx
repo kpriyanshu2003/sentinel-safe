@@ -32,29 +32,31 @@ export default function Authentication() {
     }));
   };
 
-  const handleNext = async (e) => {
+  const handleNext = (e) => {
     e.preventDefault();
-    if (!signUp) {
-      signInWithEmailAndPassword(auth, input.email, input.password)
-        .then(() => {
-          router.push("/dashboard");
-        })
-        .catch((error) => {
-          toast.error("Invalid Details");
-          console.log(error.message);
-        });
-    } else {
-      try {
-        const otpData = await generateOTP({
+    signUp
+      ? generateOTP({
           email: input.email,
           name: input.name,
-        });
-        setClickSignUP(true);
-      } catch (error) {
-        toast.error("Failed");
-        console.error("Failed to generate OTP", error);
-      }
-    }
+        })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.setItem("email", res.data.email);
+            localStorage.setItem("name", res.data.displayName);
+            setClickSignUp(true);
+          })
+          .catch((err) => {
+            toast.error("Failed to generate OTP. Status Code 500");
+            console.log(err);
+          })
+      : signInWithEmailAndPassword(auth, input.email, input.password)
+          .then(() => {
+            router.push("/dashboard");
+          })
+          .catch((error) => {
+            toast.error("Invalid Details");
+            console.log(error.message);
+          });
   };
 
   const vefyOTP = () => {
@@ -67,7 +69,7 @@ export default function Authentication() {
           })
           .catch((err) => {
             console.log(err);
-            toast("Invalid OTP");
+            toast.error('Invalid OTP')
           });
       })
       .then(() => {
@@ -79,10 +81,11 @@ export default function Authentication() {
         console.log(err);
       });
   };
-  const handleGoogleAuth = async () => {
-    const provider = new GoogleAuthProvider();
+
+  const handleGoogleAuth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
+        console.log(result.user);
         router.push("/dashboard");
       })
       .catch((err) => {
