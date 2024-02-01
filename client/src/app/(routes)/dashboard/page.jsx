@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import { auth } from "@/firebase.config";
 import Navbar from "@/components/Navbar";
 import Reviews from "@/components/Reviews";
 import Divider from "@mui/material/Divider";
 import Accordion from "@mui/material/Accordion";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState } from "react";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionActions from "@mui/material/AccordionActions";
@@ -17,7 +19,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const page = () => {
   const [collapsed, setCollapsed] = useState(true);
-
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) console.log("User not found");
+      else console.log(user.displayName, user.email);
+    });
+  }, []);
   return (
     <div className="h-screen w-screen">
       <Navbar />
@@ -66,10 +73,11 @@ const page = () => {
               borderRadius: "10px",
               overflow: "hidden",
               marginTop: "1rem",
+              position:"sticky"
             }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              
               aria-controls="panel1-content"
               id="panel1-header"
               className="outline-transparent border-transparent"
@@ -78,7 +86,7 @@ const page = () => {
             </AccordionSummary>
             <AccordionDetails
               className="outline-transparent border-transparent"
-              style={{ background: "#f1f1f194" }}
+              style={{ background: "#f1f1f194"}}
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
@@ -89,20 +97,27 @@ const page = () => {
             <h3 className="mt-2 text-green-400 text-lg font-semibold">
               User Reviews
             </h3>
-            <div className="h-64 cursor-default overflow-auto my-2">
+            <div className="h-68 cursor-default overflow-scroll my-2">
               <Reviews />
               <Reviews />
               <Reviews />
               <Reviews />
               <Reviews />
+              <Reviews />
+              <Reviews />
+              <Reviews />
+              <Reviews />
+              <Reviews />
+             
             </div>
           </div>
-          <span className="text-gray-400 text-center w-full absolute bottom-5 ">
+          <span className="text-gray-400 text-center w-full absolute bottom-0  bg-gray-900">
             scroll down to read more <KeyboardArrowDownIcon />
           </span>
         </div>
       </div>
     </div>
+   
   );
 };
 

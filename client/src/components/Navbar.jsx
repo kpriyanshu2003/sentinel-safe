@@ -69,12 +69,6 @@ const Navbar = () => {
           </Link>
 
           <div
-            className="transition-all duration-300 flex items-center border-emerald-600 justify-center cursor-pointer border-2 rounded text-emerald-600 p-2 font-bold  hover:bg-gray-300 hover:text-black active:bg-emerald-700 h-8"
-            onClick={() => handleSignOut()}
-          >
-            Log Out
-          </div>
-          <div
             className="rounded-full  w-12 h-12 border-emerald-600 border-2 bg-cover bg-center"
             style={{ backgroundImage: "url('/avatar2.svg')" }}
             onMouseEnter={handleHover}
