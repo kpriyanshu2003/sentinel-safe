@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import otpGenerator from "otp-generator";
-import dotenv from "dotenv";
 import { createError } from "../../error";
+import { NextFunction, Request, Response } from "express";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -53,7 +53,7 @@ export const generateOTP = async (
   };
   console.log(email);
   transporter.sendMail({ ...verifyOtp, to: email as string }, (err) => {
-    if (err) return next(err);
+    if (err) return next(createError(500, "Internal Server Error"));
     return res.status(200).send({ message: "OTP sent" });
   });
 };

@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import { auth } from "@/firebase.config";
 import Navbar from "@/components/Navbar";
 import Reviews from "@/components/Reviews";
 import Divider from "@mui/material/Divider";
 import Accordion from "@mui/material/Accordion";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState } from "react";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AccordionActions from "@mui/material/AccordionActions";
@@ -17,7 +19,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const page = () => {
   const [collapsed, setCollapsed] = useState(true);
-
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) console.log("User not found");
+      else console.log(user.displayName, user.email);
+    });
+  }, []);
   return (
     <div className="h-screen w-screen">
       <Navbar />

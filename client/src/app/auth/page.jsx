@@ -1,10 +1,13 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
-import axios from "axios";
-import { generateOTP } from "@/api/index";
+import React, { useState } from "react";
 import { verifyOTP } from "@/api/index";
+import { auth } from "@/firebase.config";
+import { generateOTP } from "@/api/index";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import OTPInput, { ResendOTP } from "otp-input-react";
+
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -12,20 +15,18 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 
-import { useState } from "react";
-import { auth } from "@/firebase.config";
-import { useRouter } from "next/navigation";
-import OTPInput, { ResendOTP } from "otp-input-react";
 export default function Authentication() {
   const [input, setInput] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const provider = new GoogleAuthProvider();
   const router = useRouter();
   const [signUp, setSignUp] = useState(false);
-  const [clickSignUp, setClickSignUP] = useState(false);
+  const [clickSignUp, setClickSignUp] = useState(false);
   const [OTP, setOTP] = useState("");
+
   const handleChange = (event) => {
     setInput((prevInput) => ({
       ...prevInput,
@@ -33,48 +34,60 @@ export default function Authentication() {
     }));
   };
 
-  const handleNext = async (e) => {
+  const handleNext = (e) => {
     e.preventDefault();
-    if (!signUp) {
-      signInWithEmailAndPassword(auth, input.email, input.password)
-        .then(() => {
-          router.push("/dashboard");
-        })
-        .catch((error) => {
-          toast.error("Invalid Details");
-          console.log(error.message);
-        });
-    } else {
-      try {
-        const otpData = await generateOTP({
+    signUp
+      ? generateOTP({
           email: input.email,
           name: input.name,
-        });
-        setClickSignUP(true);
-      } catch (error) {
-        toast.error("Failed");
-        console.error("Failed to generate OTP", error);
-      }
-    }
+        })
+          .then((res) => {
+            console.log(res.data);
+            localStorage.setItem("email", res.data.email);
+            localStorage.setItem("name", res.data.displayName);
+            setClickSignUp(true);
+          })
+          .catch((err) => {
+            toast.error("Failed to generate OTP. Status Code 500");
+            console.log(err);
+          })
+      : signInWithEmailAndPassword(auth, input.email, input.password)
+          .then(() => {
+            router.push("/dashboard");
+          })
+          .catch((error) => {
+            toast.error("Invalid Details");
+            console.log(error.message);
+          });
   };
 
-  const verifyOTP = async (e) => {
-    e.preventDefault();
-    try {
-      console.log(OTP);
-      const res = await verifyOTP(OTP);
-      router.push("/dashboard");
-      setClickSignUP(false);
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      toast.error("Invalid OTP");
-    }
+  const vefyOTP = () => {
+    verifyOTP(OTP)
+      .then((res) => {
+        console.log(res.data);
+        createUserWithEmailAndPassword(auth, input.email, input.password)
+          .then((res) => {
+            console.log(res.user);
+          })
+          .catch((err) => {
+            console.log(err);
+            throw new Error(err);
+          });
+      })
+      .then(() => {
+        router.push("/dashboard");
+        setClickSignUp(false);
+      })
+      .catch((err) => {
+        toast.error("Invalid OTP");
+        console.log(err);
+      });
   };
 
-  const handleGoogleAuth = async () => {
-    const provider = new GoogleAuthProvider();
+  const handleGoogleAuth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
+        console.log(result.user);
         router.push("/dashboard");
       })
       .catch((err) => {
@@ -178,7 +191,7 @@ export default function Authentication() {
                   onClick={handleNext}
                   className="transition duration-300 mt-2 flex w-full justify-center rounded-md bg-green-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500"
                 >
-                  {!signUp ? "Sign in" : "Sign UP"}
+                  {!signUp ? "Sign In" : "Sign Up"}
                 </button>
               </div>
             </form>
@@ -220,11 +233,11 @@ export default function Authentication() {
             ></OTPInput>
             <ResendOTP
               onResendClick={() => console.log("Resend clicked")}
-              className="font-bold text-green-600"
+              className="font-bold text-green-600 cursor-auto"
             />
             <button
-              className="font-semibold text-white leading-6 p-2 mt-3 rounded bg-emerald-800 hover:bg-emerald-600 cursor-pointer"
-              onClick={verifyOTP}
+              className="font-semibold text-white leading-6 p-2 mt-3 rounded bg-emerald-600 hover:bg-emerald-800 cursor-pointer transition-all duration-300"
+              onClick={vefyOTP}
             >
               Verify OTP
             </button>
