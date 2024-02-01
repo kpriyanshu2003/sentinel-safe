@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { generateOTP } from "../../api/index";
-import { verifyOTP } from "../../api/index";
+import { generateOTP } from "@/api/index";
+import { verifyOTP } from "@/api/index";
 import toast, { Toaster } from "react-hot-toast";
 import {
   signInWithEmailAndPassword,
