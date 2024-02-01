@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
-import axios from "axios";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { generateOTP } from "../../api/index";
 import { verifyOTP } from "../../api/index";
 import toast, { Toaster } from "react-hot-toast";
@@ -58,18 +57,28 @@ export default function Authentication() {
     }
   };
 
-  const verifyOTP = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await verifyOTP(OTP);
-      router.push("/dashboard");
-      setClickSignUP(false);
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      toast.error("Invalid OTP");
-    }
+  const vefyOTP = () => {
+    verifyOTP(OTP)
+      .then((res) => {
+        console.log(res.data);
+        createUserWithEmailAndPassword(auth, input.email, input.password)
+          .then((res) => {
+            console.log(res.user);
+          })
+          .catch((err) => {
+            console.log(err);
+            toast("Invalid OTP");
+          });
+      })
+      .then(() => {
+        router.push("/dashboard");
+        setClickSignUp(false);
+      })
+      .catch((err) => {
+        toast.error("Invalid OTP");
+        console.log(err);
+      });
   };
-
   const handleGoogleAuth = async () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)

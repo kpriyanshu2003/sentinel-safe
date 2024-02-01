@@ -27,6 +27,7 @@ export const generateOTP = async (
     digits: true,
   });
   const { email, name } = req.query;
+  
   const verifyOtp = {
     to: email,
     subject: "Account Verification OTP",
