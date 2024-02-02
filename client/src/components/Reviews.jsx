@@ -6,7 +6,7 @@ const Reviews = () => {
   return (
     <Card
       variant="outlined"
-      className="bg-transparent text-white border-white mt-3 md-3 p-3"
+      className="bg-yellow text-white border-white mt-3 md-3 p-3"
     >
       <Typography className="font-bold text-sm">Akangkha Sarkar</Typography>
 

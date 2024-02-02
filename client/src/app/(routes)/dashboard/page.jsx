@@ -97,17 +97,13 @@ const page = () => {
             <h3 className="mt-2 text-green-400 text-lg font-semibold">
               User Reviews
             </h3>
-            <div className="h-68 cursor-default overflow-scroll my-2">
+            <div className="h-68 cursor-default  my-2">
               <Reviews />
               <Reviews />
               <Reviews />
               <Reviews />
               <Reviews />
-              <Reviews />
-              <Reviews />
-              <Reviews />
-              <Reviews />
-              <Reviews />
+            
              
             </div>
           </div>
