@@ -396,6 +396,7 @@ export default function Authentication() {
                     id="email"
                     name="email"
                     type="email"
+                    pattern="[a-zA-Z0-9]+"
                     autoComplete="email"
                     onChange={handleChange}
                     required

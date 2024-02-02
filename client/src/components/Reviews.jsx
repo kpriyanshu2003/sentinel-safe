@@ -2,18 +2,20 @@ import { Typography } from "@mui/material";
 import React from "react";
 import Card from "@mui/material/Card";
 
-const Reviews = () => {
+const Reviews = ({review}) => {
   return (
     <Card
       variant="outlined"
-      className="bg-yellow text-white border-white mt-3 md-3 p-3"
+      className="bg-transparent text-white border-white mt-3 md-3 p-3"
     >
-      <Typography className="font-bold text-sm">Akangkha Sarkar</Typography>
+     
+    
+          <Typography className="font-bold text-sm">{review.name}</Typography>
 
-      <p className="opacity-70 text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. cia vitae totam
-        eveniet iste inventore
-      </p>
+          <p className="opacity-70 text-sm">{review.review}</p>
+
+        
+     
     </Card>
   );
 };
