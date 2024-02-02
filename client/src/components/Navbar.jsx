@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Popover } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -6,6 +6,7 @@ import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import { useRouter } from "next/navigation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,6 +23,7 @@ const Navbar = () => {
 
   const router = useRouter();
   function handleSignOut() {
+    localStorage.removeItem("image");
     signOut(auth)
       .then(() => {
         console.log("SignOut Success");
@@ -31,6 +33,8 @@ const Navbar = () => {
         console.log("Error: ", error.message);
       });
   }
+  const image = localStorage.getItem("image");
+
   return (
     <div>
       <div className="w-screen h-14 shadow-gray-900 shadow-lg justify-between flex items-center pr-8 pl-8 text-center">
