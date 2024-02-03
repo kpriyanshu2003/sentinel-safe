@@ -5,16 +5,16 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 // import helmet from "helmet";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3300;
-export const prisma = new PrismaClient();
+// export const prisma = new PrismaClient();
 
 import authRoutes from "./src/routes/auth";
-import prismaRoutes from "./src/routes/prisma";
+// import prismaRoutes from "./src/routes/prisma";
 
 app.use(compress());
 app.use(cors({ origin: "*" }));
@@ -29,7 +29,7 @@ export const io = new Server(httpServer, {
 });
 
 app.use("/auth", authRoutes);
-app.use("/prisma", prismaRoutes);
+// app.use("/prisma", prismaRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({

@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 .react-tel-input .form-control {
   @apply !w-full py-4 !text-base;
+
  
 }
 
