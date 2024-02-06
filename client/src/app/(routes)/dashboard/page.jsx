@@ -29,6 +29,7 @@ const page = () => {
       } else {
         console.log(user.displayName, user.email);
         localStorage.setItem("image", user.photoURL);
+        localStorage.setItem("name", user.displayName);
       }
     });
   }, []);
