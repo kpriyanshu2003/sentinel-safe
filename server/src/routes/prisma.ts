@@ -1,7 +1,15 @@
-// import express from "express";
-// const router = express.Router();
-// import { get } from "../controller/prisma";
+import express from "express";
+const router = express.Router();
+import {
+  createUser,
+  deleteUser,
+  getUser,
+  updateUser,
+} from "../controller/prisma";
 
-// router.get("/", get);
+router.get("/read", getUser);
+router.post("/create", createUser);
+router.patch("/update", updateUser);
+router.delete("/delete/:id", deleteUser);
 
-// export default router;
+export default router;
