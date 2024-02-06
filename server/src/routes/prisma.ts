@@ -1,7 +1,7 @@
-import express from "express";
-const router = express.Router();
-import { get } from "../controller/prisma";
+// import express from "express";
+// const router = express.Router();
+// import { get } from "../controller/prisma";
 
-router.get("/", get);
+// router.get("/", get);
 
-export default router;
+// export default router;
