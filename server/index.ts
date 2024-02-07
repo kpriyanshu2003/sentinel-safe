@@ -15,6 +15,7 @@ export const prisma = new PrismaClient();
 
 import authRoutes from "./src/routes/auth";
 import prismaRoutes from "./src/routes/prisma";
+import sochlengeRoutes from "./src/routes/locmetrics";
 
 app.use(compress());
 app.use(cors({ origin: "*" }));
@@ -30,6 +31,7 @@ export const io = new Server(httpServer, {
 
 app.use("/auth", authRoutes);
 app.use("/prisma", prismaRoutes);
+app.use("/sochlenge", sochlengeRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({
