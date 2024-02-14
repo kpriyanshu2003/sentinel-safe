@@ -3,7 +3,9 @@ import cv2
 import cvzone
 import math
 import time
+import torch
 
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ...
 cap = cv2.VideoCapture("CrowdVideo.mp4")  # For Video
 # cap = cv2.VideoCapture(0)
