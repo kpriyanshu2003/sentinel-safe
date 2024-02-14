@@ -1,0 +1,15 @@
+flask
+flask_cors
+waitress
+python-dotenv
+PyPDF2
+spacy
+ultralytics
+opencv-python
+cvzone
+numpy
+matplotlib
+scipy
+scikit-learn
+pandas
+torch
