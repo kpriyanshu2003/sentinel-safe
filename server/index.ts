@@ -4,21 +4,23 @@ import compress from "compression";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import { createServer } from "http";
-import { Server } from "socket.io";
-// import { PrismaClient } from "@prisma/client";
-// import helmet from "helmet";
+import { Server, Socket } from "socket.io";
+import { PrismaClient } from "@prisma/client";
+import helmet from "helmet";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3300;
-// export const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 import authRoutes from "./src/routes/auth";
-// import prismaRoutes from "./src/routes/prisma";
+import prismaRoutes from "./src/routes/prisma";
+import locMetricsRoutes from "./src/routes/locmetrics";
+import { ChatMessage } from "./src/@types/ChatMessage";
 
 app.use(compress());
 app.use(cors({ origin: "*" }));
-// app.use(helmet());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -29,7 +31,8 @@ export const io = new Server(httpServer, {
 });
 
 app.use("/auth", authRoutes);
-// app.use("/prisma", prismaRoutes);
+app.use("/prisma", prismaRoutes);
+app.use("/locmetrics", locMetricsRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({
@@ -38,15 +41,21 @@ app.use("/", (req: Request, res: Response) => {
   });
 });
 
-io.on("connection", (socket) => {
-  console.log(socket.id + " connected");
+io.on("connection", (socket: Socket) => {
+  socket.on("user-joined", (name: string) => {
+    socket.broadcast.emit("user-joined", name);
+  });
 
-  socket.on("chatMessage", (msg) => {
-    io.emit("chatMessage", msg);
+  socket.on("chatMessage", (message: ChatMessage) => {
+    socket.broadcast.emit("chatMessage", {
+      text: message.text,
+      userDetails: message.userDetails,
+      type: "receive",
+    });
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("someone disconnected");
   });
 });
 
@@ -55,6 +64,6 @@ httpServer.listen(port, () => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+  console.error(err);
+  res.status(500).send({ message: "Something Broke!" });
 });

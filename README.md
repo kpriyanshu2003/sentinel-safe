@@ -1,3 +1,7 @@
-# Crowd-Management
+# Sentinel Safe
 
-A crowd management app for colleges, to reduce inequalities and promote safer and peaceful environment for students.
+A web app Empowering Communities, Ensuring Safety and overall well being of the citizens.
+
+### Working with Prisma
+
+`prisma migrate dev --name <name_to_manage_versions> --schema ./src/prisma/schema.prisma`

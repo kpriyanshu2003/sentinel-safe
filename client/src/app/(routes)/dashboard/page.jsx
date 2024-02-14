@@ -54,15 +54,18 @@ const page = () => {
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         console.log("User not found");
-        router.push("/");
-      } else {
-        console.log(user.displayName, user.email);
-        localStorage.setItem("email", user.email);
-        localStorage.setItem("username", user.displayName);
-        localStorage.setItem("image", user.photoURL);
-      }
+        router.push("/auth");
+      } else
+        localStorage.setItem(
+          "userDetails",
+          JSON.stringify({
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          })
+        );
     });
-  }, open);
+  }, []);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
