@@ -26,6 +26,7 @@ export const generateOTP = async (
     lowerCaseAlphabets: false,
     digits: true,
   });
+  console.log(req.app.locals.OTP);
   const { email, name } = req.query;
   const verifyOtp = {
     to: email,

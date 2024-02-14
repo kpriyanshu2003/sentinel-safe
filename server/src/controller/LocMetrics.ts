@@ -77,7 +77,7 @@ export async function getLocMetricsbyTime(req: Request, res: Response) {
 export async function deleteLocMetrics(req: Request, res: Response) {
   const speedPeople = await prisma.locMetrics.delete({
     where: {
-      campusName: req.params.id,
+      id: req.params.id,
     },
   });
   res.status(200).json(speedPeople);

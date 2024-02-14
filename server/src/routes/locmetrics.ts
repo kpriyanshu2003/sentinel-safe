@@ -16,6 +16,6 @@ router.get("/r/:id", getLocMetricsByRisk);
 router.get("/t/:id", getLocMetricsbyTime);
 router.post("/", createLocMetrics);
 router.patch("/", updateLocMetrics);
-router.delete("/", deleteLocMetrics);
+router.delete("/:id", deleteLocMetrics);
 
 export default router;
