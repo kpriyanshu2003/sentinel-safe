@@ -1,7 +1,6 @@
 "use client";
 
 import io from "socket.io-client";
-import { List } from "react-virtualized";
 import React, { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase.config";
