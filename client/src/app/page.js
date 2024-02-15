@@ -1,7 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import React, { useEffect } from "react";
 import Image from "next/image";
 
 export default function Home() {
+  useEffect(() => {
+    function enterPressed(e) {
+      if (e.key === "Enter") {
+        window.location.href = "/auth";
+      }
+    }
+    window.addEventListener("keypress", enterPressed);
+    return () => window.removeEventListener("keypress", enterPressed);
+  });
   return (
     <>
       <div className="h-svh overflow-hidden grid place-items-center">
