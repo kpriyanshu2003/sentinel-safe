@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import React, { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase.config";
+import Navbar from "@/components/Navbar";
 
 function Page() {
   const [chat, setChat] = useState("");
@@ -96,6 +97,7 @@ function Page() {
 
   return (
     <div className="relative h-screen w-screen">
+      <Navbar />
       <form onSubmit={(e) => handleSubmit(e)} className="border w-full flex">
         <input
           type="text"
