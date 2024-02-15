@@ -38,7 +38,7 @@ const Navbar = () => {
     typeof window !== "undefined" ? localStorage.getItem("checkout") : null;
   return (
     <div
-      className={`w-screen  shadow-gray-900 shadow-lg justify-between flex items-center pr-8 pl-8 text-center  ${
+      className={`w-screen  shadow-gray-900 shadow-lg justify-between flex items-center pr-8 pl-8 text-center   ${
         isAboveMediumScreens ? "h-14" : "flex-col h-auto"
       }`}
     >
@@ -49,6 +49,7 @@ const Navbar = () => {
         width={150}
         height={50}
         onClick={() => router.push("/")}
+        priority={true}
       />
       <div
         className={`flex gap-3 items-center ${
@@ -73,7 +74,7 @@ const Navbar = () => {
           }}
         >
           <Card className="p-3 border-black rounded border text-sm">
-            Username : Akangkha <br></br> Email: {localStorage.getItem("email") }
+            Username : Akangkha <br></br> Email: {(typeof window !== 'undefined') ? localStorage.getItem("email") : null }
           </Card>
         </Popover>
         <Link href="/auth">
