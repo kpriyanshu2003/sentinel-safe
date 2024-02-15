@@ -250,6 +250,7 @@
 // }
 
 "use client";
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { verifyOTP } from "@/api/index";
@@ -257,7 +258,10 @@ import { auth } from "@/firebase.config";
 import { generateOTP } from "@/api/index";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import OTPInput, { ResendOTP } from "otp-input-react";
+import dynamic from "next/dynamic";
+
+const OTPInput = dynamic(() => import("otp-input-react"), { ssr: false });
+const ResendOTP = dynamic(() => import("otp-input-react"), { ssr: false });
 
 import {
   signInWithEmailAndPassword,
@@ -447,8 +451,13 @@ export default function Authentication() {
               onClick={handleGoogleAuth}
               className="flex hover:shadow-md item-center gap-3 justify-center w-full p-2 mt-3 border-gray-100 border-2 transition duration-300 shadow-md font-semibold text-sm text-gray-400 hover:shadow-gray-400"
             >
-              <Image src="/google.png" width={20} height={20}></Image> Sign in
-              with Google
+              <Image
+                src="/google.png"
+                width={20}
+                height={20}
+                alt="google-icon"
+              ></Image>
+              Sign in with Google
             </button>
 
             <div
@@ -464,7 +473,7 @@ export default function Authentication() {
             </div>
           </div>
         ) : (
-          <div className="  flex-col flex mt-10 md:mx-auto md:w-full md:max-w-sm  ">
+          <div className="flex-col flex mt-10 md:mx-auto md:w-full md:max-w-sm">
             <OTPInput
               value={OTP}
               onChange={setOTP}
