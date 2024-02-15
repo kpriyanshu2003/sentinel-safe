@@ -1,19 +1,7 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
-import React, { useEffect } from "react";
 
 export default function Home() {
-  useEffect(() => {
-    window.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        window.location.href = "/dashboard";
-      }
-      return () => {
-        window.removeEventListener("keypress");
-      };
-    });
-  });
   return (
     <>
       <div className="h-svh overflow-hidden grid place-items-center">
