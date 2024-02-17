@@ -2,11 +2,12 @@ import csv
 import time
 from ultralytics import YOLO
 import cv2
-import requests
+import json
 
 
-def count_people_in_video(video_path, model_path="yolov5s.pt", url=None):
-
+def count_people_in_video(
+    video_path, model_path="yolov5s.pt", output_path="temp/people_count.csv"
+):
 
     cap = cv2.VideoCapture(video_path)
     model = YOLO(model_path)
@@ -95,7 +96,7 @@ def count_people_in_video(video_path, model_path="yolov5s.pt", url=None):
     ]
 
     # Initialize CSV file and writer
-    csv_file = open("../temp/people_count.csv", mode="w")
+    csv_file = open(output_path, mode="w")
     csv_writer = csv.writer(csv_file)
     csv_writer.writerow(["Time", "People Count", "Avg Speed"])
 
@@ -103,19 +104,21 @@ def count_people_in_video(video_path, model_path="yolov5s.pt", url=None):
     new_frame_time = 0
     total_people = 0
     frame_count = 0
+    box_count = 0
+    avg_speed = 0
 
+    print("Model Scanning Video....")
     while True:
         new_frame_time = time.time()
         success, img = cap.read()
 
         if not success:
             print("Footage over")
-            break
+            return json.dumps({"peopleCount": box_count, "avgSpeed": avg_speed})
 
         results = model(img, stream=True)
 
         # counter to keep track of the number of bounding boxes
-        box_count = 0
 
         for r in results:
             boxes = r.boxes
@@ -141,7 +144,7 @@ def count_people_in_video(video_path, model_path="yolov5s.pt", url=None):
         avg_speed = 1 / (new_frame_time - prev_frame_time)
         prev_frame_time = new_frame_time
         # print(f"People Count: {box_
-        print(f"People Count: {box_count}, Avg People: {avg_people}, avg_speed: {avg_speed}")
+        # print(f"People Count: {box_count}, Avg People: {avg_people}, avg_speed: {avg_speed}")
 
         # Write to CSV file
         csv_writer.writerow([time.strftime("%Y-%m-%d %H:%M:%S"), box_count, avg_speed])
@@ -152,9 +155,10 @@ def count_people_in_video(video_path, model_path="yolov5s.pt", url=None):
     # Close CSV file
     csv_file.close()
 
-    post = requests.post(url, json={"Average-people-count": box_count, "Average-people-speed": avg_speed})
 
+# Sample Usage
 video_path = "../resource/CrowdVideo.mp4"
-model_path="yolov5s.pt"
-url = 'https://sentinel-safe-backend.vercel.app/'
-count = count_people_in_video(video_path, model_path, url)
+model_path = "yolov5s.pt"
+# count = { peopleCount: int, avgSpeed: int }
+count = count_people_in_video(video_path, model_path)
+print(count)
