@@ -19,7 +19,8 @@ const Navbar = () => {
   const id = open ? "simple-popover" : undefined;
 
   useEffect(() => {
-    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+    if (typeof window !== "undefined")
+      setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
 
   console.log(userDetails);
