@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import Reviews from "../../../components/Reviews";
+import Reviews from "../Reviews";
 import TextField from "@mui/material/TextField";
 import Accordion from "@mui/material/Accordion";
 import CloseIcon from "@mui/icons-material/Close";
@@ -38,15 +38,11 @@ const Sidebar = ({
 
   return (
     <div
-      className={`absolute p-8 bg-gray-900 text-white transition duration-300  ${
+      className={`w-full absolute p-8 bg-gray-900 text-white transition-all duration-300  ${
         collapsed
-          ? "translate-x-full hidden"
-          : "grid place-content-start translate-x-0"
-      } ${
-        isAboveMediumScreens
-          ? "right-0 h-full w-[25vw]"
-          : "bottom-0 h-[75vh] w-screen"
-      }`}
+          ? "md:translate-x-full translate-y-full md:translate-y-0"
+          : " place-content-start md:translate-x-0 translate-y-0 md:translate-y-0"
+      } md:right-0 md:h-full md:w-[25vw] bottom-0 h-[80vh] w-screen`}
     >
       <CloseIcon
         sx={{
@@ -115,7 +111,6 @@ const Sidebar = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-    
         <Box className="absolute  top-1/2   left-1/2  -translate-x-1/2  flex  flex-col gap-2 -translate-y-1/2  w-96  bg-gray-100   border-2 rounded border-black  shadow-lg p-4">
           <Typography
             id="modal-modal-title"

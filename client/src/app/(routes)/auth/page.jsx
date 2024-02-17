@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { verifyOTP } from "@/api/index";
@@ -6,7 +7,10 @@ import { auth } from "@/firebase.config";
 import { generateOTP } from "@/api/index";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import OTPInput, { ResendOTP } from "otp-input-react";
+import dynamic from "next/dynamic";
+
+const OTPInput = dynamic(() => import("otp-input-react"), { ssr: false });
+const ResendOTP = dynamic(() => import("otp-input-react"), { ssr: false });
 import { z } from "zod";
 import {
   signInWithEmailAndPassword,

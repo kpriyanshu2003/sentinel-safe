@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import useStore from "@/store/store";
+import useStore from "@/zustand/store";
 
 const Location = () => {
   const update = useStore((state) => state.update);
