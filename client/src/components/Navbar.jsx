@@ -10,6 +10,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const router = useRouter();
+
   const [userDetails, setUserDetails] = useState({});
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -22,7 +23,8 @@ const Navbar = () => {
   useEffect(() => {
     setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
-
+ 
+  console.log(userDetails);
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -78,16 +80,12 @@ const Navbar = () => {
           }}
         >
           <Card className="p-3 border-black rounded border text-sm">
-            {typeof window !== "undefined" ? (
-                <>
-                  username: <span>{localStorage.getItem("username")}</span>
-                  <br></br>
-                </>
-              ):<></>}
-            Email:{" "}
-            {typeof window !== "undefined"
-              ? localStorage.getItem("email")
-              : null}
+           
+              
+                username: <span>{userDetails.displayName}</span>
+                <br></br>
+             Email:
+             {userDetails.email}
           </Card>
         </Popover>
 
