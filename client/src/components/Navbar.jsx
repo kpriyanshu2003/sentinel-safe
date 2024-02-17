@@ -74,7 +74,16 @@ const Navbar = () => {
           }}
         >
           <Card className="p-3 border-black rounded border text-sm">
-            Username : Akangkha <br></br> Email: {(typeof window !== 'undefined') ? localStorage.getItem("email") : null }
+            {typeof window !== "undefined" ? (
+                <>
+                  username: <span>{localStorage.getItem("username")}</span>
+                  <br></br>
+                </>
+              ):<></>}
+            Email:{" "}
+            {typeof window !== "undefined"
+              ? localStorage.getItem("email")
+              : null}
           </Card>
         </Popover>
         <Link href="/auth">

@@ -33,7 +33,6 @@ const page = () => {
         console.log("User not found");
         // router.push("/");
       } else {
-        // console.log(user.displayName, user.email);
         localStorage.setItem("email", user.email);
         localStorage.setItem("username", user.displayName);
         localStorage.setItem("image", user.photoURL);
@@ -44,9 +43,16 @@ const page = () => {
   const handleOpen = () => {
     setOpen(true);
   };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in. Get the display name
+      const username = user.displayName;
+      console.log("Username: ", username);
+    } })
   const handleClose = () => setOpen(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
-  return (
+  
+  return (  
     <div className="h-screen w-screen ">
       <Navbar />
       <Toaster />
@@ -55,7 +61,7 @@ const page = () => {
           isAboveMediumScreens ? "flex h-[92.5vh]" : "flex flex-col h-[86vh]"
         } flex bg-green-300  `}
       >
-        <Location />
+        {/* <Location /> */}
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{ fontSize: "40px" }}

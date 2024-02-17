@@ -10,18 +10,18 @@ const Location = () => {
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_mapAccessToken;
     const map = new mapboxgl.Map({
-      container: "map", // container ID
-      style: "mapbox://styles/mapbox/streets-v12", // corrected style URL
+      container: "map", 
+      style: "mapbox://styles/mapbox/streets-v12", 
       center: [85.8161, 20.3555], // starting position [lng, lat]
-      zoom: 15, // starting zoom
+      zoom: 15, 
       // maxBounds: boundsN
     });
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
-      placeholder: "Search for places", // Placeholder text for search box
-      countries: "in", // Limit search to India
+      placeholder: "Search for places", 
+      countries: "in",
       autocomplete: false,
     });
 
@@ -70,16 +70,16 @@ const Location = () => {
         };
       };
 
-      // Define an array of polygon coordinates
+ 
       const polygonCoordinates = [
         [85.812629, 20.354031],
         [85.8136, 20.3539],
         [85.827579, 20.356502],
         [85.810526, 20.353293],
-        // Add more coordinates here as needed
+
       ];
 
-      // Loop through the polygon coordinates and add sources and layers to the map
+     
       polygonCoordinates.forEach((coord, index) => {
         const sourceName = `polygon${index}`;
         map.addSource(sourceName, createGeoJSONCircle(coord, 0.1));
@@ -95,9 +95,8 @@ const Location = () => {
           },
         });
 
-        // Add click event listener to the layer
         map.on("click", sourceName, function (e) {
-          // Get the coordinates of the center of the circle
+     
           const centerCoordinates = e.lngLat.toArray();
           console.log("Center Coordinates:", centerCoordinates);
         });
@@ -132,3 +131,4 @@ const Location = () => {
 };
 
 export default Location;
+
