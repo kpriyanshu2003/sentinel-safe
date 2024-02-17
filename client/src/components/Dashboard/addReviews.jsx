@@ -1,4 +1,4 @@
-import { db, auth } from "../../../firebase.config.js";
+import { db } from "../../firebase.config";
 import {
   collection,
   getDocs,
@@ -11,7 +11,7 @@ import {
 
 const colRef = collection(db, "reviews");
 const addReviews = async (props) => {
-  console.log("Location:", props.location, "Review:", props.review);
+  // console.log("Location:", props.location, "Review:", props.review);
 
   try {
     await addDoc(colRef, {
@@ -40,7 +40,7 @@ export const getReviews = async (props) => {
     });
 
     const first20Reviews = reviews.slice(0, 20);
-
+    //  console.log(first20Reviews);
     return first20Reviews;
   } catch (err) {
     console.log(err);
@@ -63,7 +63,7 @@ async function deleterecord() {
       );
 
       const oldestRecordsSnapshot = await getDocs(oldestRecordsQuery);
-      console.log("aaaa", oldestRecordsSnapshot);
+
       oldestRecordsSnapshot.forEach(async (doc) => {
         await deleteDoc(doc.ref);
       });

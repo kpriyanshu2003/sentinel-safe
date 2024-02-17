@@ -37,7 +37,14 @@ app.use("/locmetrics", locMetricsRoutes);
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({
     status: 200,
-    message: "API is working fine!",
+    message: "Sentienl Safe API is working fine!",
+    method: req.method,
+    body: req.body,
+    query: req.query,
+    params: req.params,
+    url: req.url,
+    headers: req.headers,
+    cookies: req.cookies,
   });
 });
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Popover, useMediaQuery } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -9,26 +9,30 @@ import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
+  const router = useRouter();
+  const [userDetails, setUserDetails] = useState({});
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   const handleHover = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
+  useEffect(() => {
+    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+  }, []);
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
-
-  const router = useRouter();
   function handleSignOut() {
-    localStorage.removeItem("image");
+    localStorage.removeItem("userDetails");
     signOut(auth)
       .then(() => {
         console.log("SignOut Success");
-        router.push("/");
+        router.push("/auth");
       })
       .catch((error) => {
         console.log("Error: ", error.message);
@@ -38,7 +42,7 @@ const Navbar = () => {
     typeof window !== "undefined" ? localStorage.getItem("checkout") : null;
   return (
     <div
-      className={`w-screen  shadow-gray-900 shadow-lg justify-between flex items-center pr-8 pl-8 text-center  ${
+      className={`w-screen justify-between flex items-center pr-8 pl-8 text-center   ${
         isAboveMediumScreens ? "h-14" : "flex-col h-auto"
       }`}
     >
@@ -49,6 +53,7 @@ const Navbar = () => {
         width={150}
         height={50}
         onClick={() => router.push("/")}
+        priority={true}
       />
       <div
         className={`flex gap-3 items-center ${
@@ -72,21 +77,32 @@ const Navbar = () => {
             horizontal: "left",
           }}
         >
-          <Card className="p-3 border-black rounded border text-sm">
-            Username : Akangkha <br></br> Email: {localStorage.getItem("email") }
+          <Card className="p-4 border-black rounded border text-sm">
+            {userDetails.displayName}
+            <br></br>
+            {typeof window !== "undefined" ? userDetails.email : null}
           </Card>
         </Popover>
-        <Link href="/auth">
-          <div className="flex  items-center border-emerald-600 justify-center cursor-pointer border-2 rounded text-emerald-600 p-2 font-bold  hover:bg-gray-300 hover:text-black active:bg-emerald-700 h-8 text-sm w-auto">
-            Log Out
-          </div>
-        </Link>
+
+        <div
+          className="flex  items-center border-emerald-600 justify-center cursor-pointer border-2 rounded text-emerald-600 p-2 font-bold  hover:bg-gray-300 hover:text-black active:bg-emerald-700 h-8 text-sm w-auto"
+          onClick={() => handleSignOut()}
+        >
+          Log Out
+        </div>
 
         <div
           className="rounded-full  w-12 h-12 border-emerald-600 border-2 bg-cover bg-center"
-          style={{ backgroundImage: "url('/avatar2.svg')" }}
           onMouseEnter={handleHover}
-        ></div>
+        >
+          <Image
+            src={userDetails.photoURL ? userDetails.photoURL : "/avatar.png"}
+            alt="user profile"
+            className="rounded-full"
+            width={50}
+            height={50}
+          />
+        </div>
       </div>
     </div>
   );

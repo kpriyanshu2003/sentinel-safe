@@ -1,18 +1,18 @@
 "use client";
+
 import Link from "next/link";
-import Image from "next/image";
 import React, { useEffect } from "react";
+import Image from "next/image";
 
 export default function Home() {
   useEffect(() => {
-    window.addEventListener("keypress", (e) => {
+    function enterPressed(e) {
       if (e.key === "Enter") {
-        window.location.href = "/dashboard";
+        window.location.href = "/auth";
       }
-      return () => {
-        window.removeEventListener("keypress");
-      };
-    });
+    }
+    window.addEventListener("keypress", enterPressed);
+    return () => window.removeEventListener("keypress", enterPressed);
   });
   return (
     <>
