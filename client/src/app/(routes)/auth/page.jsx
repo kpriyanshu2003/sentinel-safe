@@ -2,15 +2,10 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import { verifyOTP } from "@/api/index";
 import { auth } from "@/firebase.config";
-import { generateOTP } from "@/api/index";
+
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import dynamic from "next/dynamic";
-
-const OTPInput = dynamic(() => import("otp-input-react"), { ssr: false });
-const ResendOTP = dynamic(() => import("otp-input-react"), { ssr: false });
 import { z } from "zod";
 import {
   signInWithEmailAndPassword,
@@ -52,14 +47,13 @@ export default function Authentication() {
         createUser();
       } else {
         await signInWithEmailAndPassword(auth, input.email, input.password);
-        
         router.push("/dashboard");
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errorMessages = err.issues.map((issue) => issue.message);
         errorMessages.forEach((error) => toast.error(error));
-      }
+      } else toast(err.message);
     }
   };
 
@@ -70,16 +64,13 @@ export default function Authentication() {
         input.email,
         input.password
       );
-      console.log(userCredential.user);
       await updateProfile(auth.currentUser, {
         displayName: input.name,
       });
-      console.log("Update Success");
       router.push("/dashboard");
       setClickSignUp(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Invalid OTP");
-      console.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -87,11 +78,10 @@ export default function Authentication() {
     signInWithPopup(auth, provider)
       .then((result) => {
         console.log(result.user);
-        
+
         router.push("/dashboard");
       })
       .catch((err) => {
-        console.log(err.message);
         toast.error("Authentication Failed!");
       });
   };

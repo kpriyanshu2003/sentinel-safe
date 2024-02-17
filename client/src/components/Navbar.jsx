@@ -6,11 +6,9 @@ import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import { useRouter } from "next/navigation";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const router = useRouter();
-
   const [userDetails, setUserDetails] = useState({});
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -23,7 +21,7 @@ const Navbar = () => {
   useEffect(() => {
     setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
- 
+
   console.log(userDetails);
   const handleClose = () => {
     setAnchorEl(null);
@@ -80,12 +78,10 @@ const Navbar = () => {
           }}
         >
           <Card className="p-3 border-black rounded border text-sm">
-           
-              
-                username: <span>{userDetails.displayName}</span>
-                <br></br>
-             Email:
-             {userDetails.email}
+            username: <span>{userDetails.displayName}</span>
+            <br></br>
+            Email:
+            {userDetails.email}
           </Card>
         </Popover>
 

@@ -49,7 +49,6 @@ const page = () => {
   };
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in. Get the display name
       const username = user.displayName;
       console.log("Username: ", username);
     } })
@@ -68,7 +67,6 @@ const page = () => {
           isAboveMediumScreens ? "flex h-[92.5vh]" : "flex flex-col h-[86vh]"
         } flex bg-green-300  `}
       >
-        {/* <Location /> */}
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{ fontSize: "40px" }}
