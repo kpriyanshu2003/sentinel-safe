@@ -73,11 +73,7 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
   const { latitude, longitude }: Pick<LocMetrics, "latitude" | "longitude"> =
     req.params as unknown as LocMetrics;
   const speedPeople = await prisma.locMetrics.findFirst({
-    where: {
-      latitude: latitude,
-      longitude: longitude,
-      updatedAt: { gt: new Date(new Date().getTime() - 3600000) },
-    },
+    where: { latitude: latitude, longitude: longitude },
     select: {
       latitude: true,
       longitude: true,
@@ -85,6 +81,15 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
       color: true,
       peopleCount: true,
       avgSpeed: true,
+    },
+  });
+  res.status(200).json(speedPeople);
+}
+
+export async function getLatestData(req: Request, res: Response) {
+  const speedPeople = await prisma.locMetrics.findMany({
+    where: {
+      updatedAt: { gt: new Date(Date.now() - 1000 * 60 * 60 * 24) },
     },
   });
   res.status(200).json(speedPeople);
