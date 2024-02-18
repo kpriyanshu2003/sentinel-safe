@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import otpGenerator from "otp-generator";
-import { createError } from "../utils/error";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
+import { CustomResponse } from "../@types/CustomResponse";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
@@ -15,11 +15,7 @@ const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
 });
 
-export const generateOTP = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const generateOTP = async (req: Request, res: Response) => {
   try {
     req.app.locals.OTP = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
@@ -27,7 +23,6 @@ export const generateOTP = async (
       lowerCaseAlphabets: false,
       digits: true,
     });
-    console.log(req.app.locals.OTP);
     const { email, name } = req.query;
     const verifyOtp = {
       to: email,
@@ -55,30 +50,29 @@ export const generateOTP = async (
     };
 
     transporter.sendMail({ ...verifyOtp, to: email as string }, (err) => {
-      if (err) return next(createError(500, "Internal Server Error"));
-      return res.status(200).send({ message: "OTP sent" });
+      if (err)
+        return res
+          .status(500)
+          .send(new CustomResponse("Internal Server Error"));
+      return res.status(200).send(new CustomResponse("OTP sent"));
     });
   } catch (error) {
     console.log(error);
-    return next(createError(500, "Internal Server Error"));
+    return res.status(500).send(new CustomResponse("Internal Server Error"));
   }
 };
 
-export const verifyOTP = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const verifyOTP = async (req: Request, res: Response) => {
   try {
     const { code } = req.query;
     if (parseInt(code as string) === parseInt(req.app.locals.OTP as string)) {
       req.app.locals.OTP = null;
       req.app.locals.resetSession = true;
-      return res.status(200).send({ message: "OTP verified" });
+      return res.status(200).send(new CustomResponse("OTP verified"));
     }
-    return next(createError(403, "Wrong OTP"));
+    return res.status(400).send({ message: "Invalid OTP" });
   } catch (error) {
     console.log(error);
-    return next(createError(500, "Internal Server Error"));
+    return res.status(500).send(new CustomResponse("Internal Server Error"));
   }
 };
