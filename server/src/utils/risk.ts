@@ -1,11 +1,11 @@
 export const getRisk = (
   speed: number,
   people: number,
-  lumen: number
+  lumen: boolean
 ): number => {
   let riskRating = 0;
   if (speed > 100) riskRating += 1;
   if (people > 10) riskRating += 1;
-  if (lumen < 100) riskRating += 1;
-  return riskRating;
+  if (lumen === true) riskRating += 1;
+  return Math.trunc(riskRating);
 };

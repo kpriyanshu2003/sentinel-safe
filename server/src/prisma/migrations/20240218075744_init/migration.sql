@@ -27,8 +27,27 @@ CREATE TABLE "LocMetrics" (
     CONSTRAINT "LocMetrics_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "GeoCodes" (
+    "id" TEXT NOT NULL,
+    "campusName" TEXT NOT NULL,
+    "latitude" DECIMAL(65,30) NOT NULL DEFAULT 0,
+    "longitude" DECIMAL(65,30) NOT NULL DEFAULT 0,
+    "camId" TEXT NOT NULL DEFAULT '0',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "GeoCodes_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LocMetrics_campusName_key" ON "LocMetrics"("campusName");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "GeoCodes_latitude_longitude_key" ON "GeoCodes"("latitude", "longitude");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "GeoCodes_campusName_camId_key" ON "GeoCodes"("campusName", "camId");

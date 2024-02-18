@@ -4,6 +4,9 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from string import punctuation
 from heapq import nlargest
 
+import en_core_web_sm
+nlp = en_core_web_sm.load()
+
 # Function to extract text from a PDF file
 def extract_text_from_pdf(file_path):
     with open(file_path, 'rb') as file:
@@ -14,7 +17,7 @@ def extract_text_from_pdf(file_path):
             text += page.extract_text()
         return text
 
-file_path = r"C:\Users\KIIT\Desktop\sample-review-document.pdf"
+file_path = "../temp/sample-review-document.pdf"
 pdf_text = extract_text_from_pdf(file_path)
 
 # Define stopwords using spaCy and punctuation
@@ -61,18 +64,19 @@ summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
 total_words = 0
 final_summary = []
 for sentence in summary:
-    words_in_sentence = sentence.text.split()
-    if total_words + len(words_in_sentence) <= 500:
-        final_summary.extend(words_in_sentence)
-        total_words += len(words_in_sentence)
+    words_in_sentence = sentence.text
+    if total_words + len(words_in_sentence.split()) <= 500:
+        final_summary.append(words_in_sentence)
+        total_words += len(words_in_sentence.split())
     else:
         break
+
 
 # Join the final summary to create a string
 summary_text = ' '.join(final_summary)
 
 # Save the summary to a text file
-output_file_path = 'reference_summary.txt'
+output_file_path = '../temp/reference_summary.txt'
 with open(output_file_path, 'w', encoding='utf-8') as output_file:
     output_file.write(summary_text)
 

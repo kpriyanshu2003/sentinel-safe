@@ -1,6 +1,3 @@
-flask
-flask_cors
-waitress
 python-dotenv
 PyPDF2
 spacy
@@ -13,3 +10,4 @@ scipy
 scikit-learn
 pandas
 torch
+firebase-admin

@@ -38,3 +38,5 @@ next-env.d.ts
 
 # ignore ultralytics yolov5
 yolo*
+*.csv
+.idea
