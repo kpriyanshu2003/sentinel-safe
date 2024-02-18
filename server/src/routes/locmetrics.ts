@@ -2,6 +2,7 @@ import express from "express";
 import {
   createLocMetrics,
   deleteLocMetrics,
+  getLatestData,
   getLocMetrics,
   getLocMetricsByCampus,
   getLocMetricsByCoordinates,
@@ -16,6 +17,7 @@ router.get("/c/:id", getLocMetricsByCampus);
 router.get("/r/:id", getLocMetricsByRisk);
 router.get("/t/:id", getLocMetricsbyTime);
 router.get("/o/:id", getLocMetricsByCoordinates);
+router.get("/l/", getLatestData);
 router.post("/", createLocMetrics);
 router.patch("/", updateLocMetrics);
 router.delete("/:id", deleteLocMetrics);
