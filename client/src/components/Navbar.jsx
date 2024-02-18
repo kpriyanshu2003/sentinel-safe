@@ -6,7 +6,6 @@ import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import { useRouter } from "next/navigation";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const Navbar = () => {
   const router = useRouter();
@@ -20,9 +19,11 @@ const Navbar = () => {
   const id = open ? "simple-popover" : undefined;
 
   useEffect(() => {
-    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+    if (typeof window !== "undefined")
+      setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
 
+  console.log(userDetails);
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -77,10 +78,11 @@ const Navbar = () => {
             horizontal: "left",
           }}
         >
-          <Card className="p-4 border-black rounded border text-sm">
-            {userDetails.displayName}
+          <Card className="p-3 border-black rounded border text-sm">
+            username: <span>{userDetails.displayName}</span>
             <br></br>
-            {typeof window !== "undefined" ? userDetails.email : null}
+            Email:
+            {userDetails.email}
           </Card>
         </Popover>
 
