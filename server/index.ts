@@ -16,6 +16,7 @@ export const prisma = new PrismaClient();
 import authRoutes from "./src/routes/auth";
 import prismaRoutes from "./src/routes/prisma";
 import locMetricsRoutes from "./src/routes/locmetrics";
+import getCodeRoutes from "./src/routes/geoCode";
 import { ChatMessage } from "./src/@types/ChatMessage";
 
 app.use(compress());
@@ -33,6 +34,7 @@ export const io = new Server(httpServer, {
 app.use("/auth", authRoutes);
 app.use("/prisma", prismaRoutes);
 app.use("/locmetrics", locMetricsRoutes);
+app.use("/geo", getCodeRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({
