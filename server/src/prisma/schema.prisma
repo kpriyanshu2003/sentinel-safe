@@ -27,6 +27,7 @@ model LocMetrics {
   avgSpeed    Decimal  @default(0)
   riskRating  Int      @default(0)
   color       String   @default("yellow")
+  sentiment   Decimal  @default(2.5)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
