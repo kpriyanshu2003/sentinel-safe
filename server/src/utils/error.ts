@@ -1,7 +1,4 @@
-class CustomError extends Error {
-  status!: number;
-  message!: string;
-}
+import { CustomError } from "../@types/CustomError";
 
 export const createError = (status: number, message: string) => {
   const err = new CustomError();
