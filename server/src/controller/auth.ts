@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import otpGenerator from "otp-generator";
-import { createError } from "../../error";
+import { createError } from "../utils/error";
 import { NextFunction, Request, Response } from "express";
 dotenv.config();
 
@@ -20,18 +20,19 @@ export const generateOTP = async (
   res: Response,
   next: NextFunction
 ) => {
-  req.app.locals.OTP = otpGenerator.generate(6, {
-    upperCaseAlphabets: false,
-    specialChars: false,
-    lowerCaseAlphabets: false,
-    digits: true,
-  });
-  console.log(req.app.locals.OTP);
-  const { email, name } = req.query;
-  const verifyOtp = {
-    to: email,
-    subject: "Account Verification OTP",
-    html: `
+  try {
+    req.app.locals.OTP = otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+      lowerCaseAlphabets: false,
+      digits: true,
+    });
+    console.log(req.app.locals.OTP);
+    const { email, name } = req.query;
+    const verifyOtp = {
+      to: email,
+      subject: "Account Verification OTP",
+      html: `
         <div style="font-family: Poppins, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
     <h1 style="font-size: 22px; font-weight: 500; color: #007AFF; text-align: center; margin-bottom: 30px;">Verify Your  SentinelSafe Account</h1>
     <div style="background-color: #FFF; border: 1px solid #e5e5e5; border-radius: 5px; box-shadow: 0px 3px 6px rgba(0,0,0,0.05);">
@@ -51,12 +52,16 @@ export const generateOTP = async (
     <p style="font-size: 16px; color: #666; margin-bottom: 20px; text-align: center;">Best regards,<br>The  SentinelSafe Team</p>
 </div>
 `,
-  };
+    };
 
-  transporter.sendMail({ ...verifyOtp, to: email as string }, (err) => {
-    if (err) return next(createError(500, "Internal Server Error"));
-    return res.status(200).send({ message: "OTP sent" });
-  });
+    transporter.sendMail({ ...verifyOtp, to: email as string }, (err) => {
+      if (err) return next(createError(500, "Internal Server Error"));
+      return res.status(200).send({ message: "OTP sent" });
+    });
+  } catch (error) {
+    console.log(error);
+    return next(createError(500, "Internal Server Error"));
+  }
 };
 
 export const verifyOTP = async (
@@ -64,11 +69,16 @@ export const verifyOTP = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { code } = req.query;
-  if (parseInt(code as string) === parseInt(req.app.locals.OTP as string)) {
-    req.app.locals.OTP = null;
-    req.app.locals.resetSession = true;
-    return res.status(200).send({ message: "OTP verified" });
+  try {
+    const { code } = req.query;
+    if (parseInt(code as string) === parseInt(req.app.locals.OTP as string)) {
+      req.app.locals.OTP = null;
+      req.app.locals.resetSession = true;
+      return res.status(200).send({ message: "OTP verified" });
+    }
+    return next(createError(403, "Wrong OTP"));
+  } catch (error) {
+    console.log(error);
+    return next(createError(500, "Internal Server Error"));
   }
-  return next(createError(403, "Wrong OTP"));
 };
