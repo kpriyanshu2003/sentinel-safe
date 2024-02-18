@@ -21,8 +21,10 @@ export const getGeoCode = async (req: Request, res: Response) => {
 };
 
 export const getGeoCodeByCampus = async (req: Request, res: Response) => {
-  const geoCodes = await prisma.geoCodes.findUnique({
-    where: { campusName: req.params.id },
+  const geoCodes = await prisma.geoCodes.findFirst({
+    where: {
+      campusName: req.params.id,
+    },
   });
   res.status(200).json(geoCodes);
 };
@@ -37,7 +39,7 @@ export const getGeoCodeByCamera = async (req: Request, res: Response) => {
 export const updateGeoCode = async (req: Request, res: Response) => {
   const { latitude, longitude, campusName, camId }: GeoCode = req.body;
   const updatedGeoCode = await prisma.geoCodes.update({
-    where: { campusName: campusName, camId: camId },
+    where: { campusName_camId: { campusName: campusName, camId: camId } },
     data: { latitude: latitude, longitude: longitude },
   });
   res.status(200).json(updatedGeoCode);
@@ -46,7 +48,7 @@ export const updateGeoCode = async (req: Request, res: Response) => {
 export const deleteGeoCode = async (req: Request, res: Response) => {
   const { campusName, camId }: GeoCode = req.body;
   const deletedGeoCode = await prisma.geoCodes.delete({
-    where: { campusName: campusName, camId: camId },
+    where: { campusName_camId: { campusName: campusName, camId: camId } },
   });
   res.status(200).json(deletedGeoCode);
 };
