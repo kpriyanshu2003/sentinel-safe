@@ -16,10 +16,10 @@ export async function getUser(req: Request, res: Response) {
 
 export async function createUser(req: Request, res: Response) {
   try {
-    if (!req.body.email || !req.body.name)
-      return res
-        .status(400)
-        .send(new CustomResponse("Email and Name are required"));
+    // if (!req.body.email || !req.body.name)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Email and Name are required"));
     const user = await prisma.user.create({
       data: req.body,
     });
@@ -35,10 +35,10 @@ export async function createUser(req: Request, res: Response) {
 export async function updateUser(req: Request, res: Response) {
   try {
     const { email, name } = req.body;
-    if (!email || !name)
-      return res
-        .status(400)
-        .send(new CustomResponse("Email and Name are required"));
+    // if (!email || !name)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Email and Name are required"));
     const updateUser = await prisma.user.update({
       where: { email: email },
       data: { name: name, updatedAt: new Date() },
@@ -54,8 +54,8 @@ export async function updateUser(req: Request, res: Response) {
 
 export async function deleteUser(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res.status(400).send(new CustomResponse("Email is required"));
+    // if (!req.params.id)
+    //   return res.status(400).send(new CustomResponse("Email is required"));
     const deleteUser = await prisma.user.delete({
       where: { email: req.params.id },
     });
