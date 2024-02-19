@@ -4,33 +4,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 .react-tel-input .form-control {
   @apply !w-full py-4 !text-base;
-
- 
 }
 
 ::-webkit-scrollbar {
-  display: none; /* Hide scrollbar */
+  display: none;
 }
 
 * {
   font-family: "Montserrat", sans-serif;
 }
 
-.mapboxgl-ctrl-attrib-inner
-{
+.mapboxgl-ctrl-attrib-inner {
   display: none;
 }
 
-.mapboxgl-control-container
-{
- 
+.mapboxgl-control-container {
   position: absolute;
-  top: 30px; 
-  left: 280px; 
-  z-index: 1; 
+  top: 30px;
+  left: 280px;
+  z-index: 1;
 }
 
-.mapboxgl-ctrl-bottom-left
-{
+.mapboxgl-ctrl-bottom-left {
   display: none;
 }

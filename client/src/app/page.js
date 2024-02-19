@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 import Image from "next/image";
-
+//real folder
 export default function Home() {
   useEffect(() => {
     function enterPressed(e) {

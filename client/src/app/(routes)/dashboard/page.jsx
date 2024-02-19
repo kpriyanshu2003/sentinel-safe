@@ -6,11 +6,10 @@ import { getReviews } from "@/components/Dashboard/addReviews";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Sidebar from "@/components/Dashboard/Sidebar";
 import { Toaster } from "react-hot-toast";
 // import Location from "@/components/Location";
-
+import { useMediaQuery } from "@mui/material";
 const page = () => {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
