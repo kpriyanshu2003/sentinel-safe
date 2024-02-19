@@ -41,3 +41,4 @@ yolo*
 *.csv
 .idea
 __pycache__
+serviceAccount.json

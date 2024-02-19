@@ -4,20 +4,92 @@ from ultralytics import YOLO
 import cv2
 import json
 
+
 def count_people_in_video(video_path, model_path="yolov5s.pt"):
     cap = cv2.VideoCapture(video_path)
     model = YOLO(model_path)
 
     classNames = [
-        "person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat", "traffic light",
-        "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
-        "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
-        "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-        "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple",
-        "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa",
-        "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard",
-        "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-        "teddy bear", "hair drier", "toothbrush",
+        "person",
+        "bicycle",
+        "car",
+        "motorbike",
+        "aeroplane",
+        "bus",
+        "train",
+        "truck",
+        "boat",
+        "traffic light",
+        "fire hydrant",
+        "stop sign",
+        "parking meter",
+        "bench",
+        "bird",
+        "cat",
+        "dog",
+        "horse",
+        "sheep",
+        "cow",
+        "elephant",
+        "bear",
+        "zebra",
+        "giraffe",
+        "backpack",
+        "umbrella",
+        "handbag",
+        "tie",
+        "suitcase",
+        "frisbee",
+        "skis",
+        "snowboard",
+        "sports ball",
+        "kite",
+        "baseball bat",
+        "baseball glove",
+        "skateboard",
+        "surfboard",
+        "tennis racket",
+        "bottle",
+        "wine glass",
+        "cup",
+        "fork",
+        "knife",
+        "spoon",
+        "bowl",
+        "banana",
+        "apple",
+        "sandwich",
+        "orange",
+        "broccoli",
+        "carrot",
+        "hot dog",
+        "pizza",
+        "donut",
+        "cake",
+        "chair",
+        "sofa",
+        "pottedplant",
+        "bed",
+        "diningtable",
+        "toilet",
+        "tvmonitor",
+        "laptop",
+        "mouse",
+        "remote",
+        "keyboard",
+        "cell phone",
+        "microwave",
+        "oven",
+        "toaster",
+        "sink",
+        "refrigerator",
+        "book",
+        "clock",
+        "vase",
+        "scissors",
+        "teddy bear",
+        "hair drier",
+        "toothbrush",
     ]
 
     # Initialize CSV file and writer
@@ -66,7 +138,9 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
         prev_frame_time = new_frame_time
         first_frame = False
 
-        print(f"People Count: {box_count}, Avg People: {avg_people}, avg_speed: {avg_speed}")
+        print(
+            f"People Count: {box_count}, Avg People: {avg_people}, avg_speed: {avg_speed}"
+        )
 
         # Write to CSV file
         csv_writer.writerow([time.strftime("%Y-%m-%d %H:%M:%S"), box_count, avg_speed])
@@ -88,7 +162,7 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
     csv_file.close()
     return json.dumps({"avgSpeed": avg_speed, "peopleCount": avg_people})
 
-    #post = requests.post(url, json={"Average-people-count": box_count, "Average-people-speed": avg_speed})
+    # post = requests.post(url, json={"Average-people-count": box_count, "Average-people-speed": avg_speed})
 
 
 # video_path = "../resource/CrowdVideo.mp4"
