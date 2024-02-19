@@ -4,7 +4,7 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import useStore from "@/zustand/store";
-
+import { getAllData } from "@/app/actions/getAllData";
 const Location = () => {
   const update = useStore((state) => state.update);
   useEffect(() => {
@@ -78,7 +78,8 @@ const Location = () => {
         [85.810526, 20.353293],
 
       ];
-
+      
+     
      
       polygonCoordinates.forEach((coord, index) => {
         const sourceName = `polygon${index}`;
@@ -131,4 +132,3 @@ const Location = () => {
 };
 
 export default Location;
-

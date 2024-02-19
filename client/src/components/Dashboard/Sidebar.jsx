@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 import addReviews from "./addReviews";
 import toast, { Toaster } from "react-hot-toast";
 import Metrics from "./metrics";
+import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import { useMediaQuery } from "@mui/material";
 
@@ -26,6 +27,17 @@ const Sidebar = ({
 }) => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [expanded, setExpanded] = useState(true);
+  const [value, setValue] = useState(2.5);
+  const labels = {
+    1: "Not Safe+",
+    2: "Poor",
+    3: "Neutral",
+    4: "Safe",
+    5: "Excellent",
+  };
+  function getLabelText(value) {
+    return labels[value];
+  }
 
   const [inputValue, setInputValue] = useState({
     location: "",
@@ -76,13 +88,13 @@ const Sidebar = ({
           Overview
         </AccordionSummary>
         <AccordionDetails
-          className="outline-transparent border-transparent overflow-y-scroll p-3"
+          className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
           style={{ background: "#f1f1f194" }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-          dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-          lacus ex, sit amet blandit leo lobortis eget.
+          <Rating name="read-only" value={value} precision={0.1} readOnly />
+          {value !== null && (
+            <Typography className="font-extralight">{labels[Math.floor(value)]} safety conditions</Typography>
+          )}
         </AccordionDetails>
       </Accordion>
       <div className="mb-4">

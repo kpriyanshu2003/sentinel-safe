@@ -3,10 +3,14 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { auth } from "@/firebase.config";
-
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
+import dynamic from "next/dynamic";
+
+const OTPInput = dynamic(() => import("otp-input-react"), { ssr: false });
+const ResendOTP = dynamic(() => import("otp-input-react"), { ssr: false });
+
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -24,6 +28,7 @@ export default function Authentication() {
   const provider = new GoogleAuthProvider();
   const router = useRouter();
   const [signUp, setSignUp] = useState(false);
+  const [OTP, setOTP] = useState("");
   const [clickSignUp, setClickSignUp] = useState(false);
   const validationSchema = z.object({
     name: z.string().min(1, "Name must be entered"),
@@ -45,6 +50,11 @@ export default function Authentication() {
       validationSchema.parse(input);
       if (signUp) {
         createUser();
+        const res = await generateOTP({
+          email: input.email,
+          name: input.name,
+        });
+        console.log(res.data);
       } else {
         await signInWithEmailAndPassword(auth, input.email, input.password);
         router.push("/dashboard");
