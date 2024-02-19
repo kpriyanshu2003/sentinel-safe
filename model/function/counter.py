@@ -35,7 +35,7 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
 
     first_frame = True
 
-    while time.time() - start_time < 10:
+    while time.time() - start_time < 5:
         new_frame_time = time.time()
         success, img = cap.read()
 
