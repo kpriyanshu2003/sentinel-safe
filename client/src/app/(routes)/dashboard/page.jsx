@@ -6,11 +6,10 @@ import { getReviews } from "@/components/Dashboard/addReviews";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
 import Sidebar from "@/components/Dashboard/Sidebar";
 import { Toaster } from "react-hot-toast";
 // import Location from "@/components/Location";
-
+import { useMediaQuery } from "@mui/material";
 const page = () => {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
@@ -48,13 +47,26 @@ const page = () => {
   const handleOpen = () => {
     setOpen(true);
   };
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const username = user.displayName;
+      console.log("Username: ", username);
+    } })
   const handleClose = () => setOpen(false);
-  return (
+  const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
+  
+  return (  
+   
     <div className="h-screen w-screen overflow-hidden">
       <Navbar />
       <Toaster />
       <div className="relative flex h-[92.5vh] md:flex-col md:h-[86vh bg-green-300">
         {/* <Location /> */}
+      <div
+        className={`relative ${
+          isAboveMediumScreens ? "flex h-[92.5vh]" : "flex flex-col h-[86vh]"
+        } flex bg-green-300  `}
+      >
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{ fontSize: "40px" }}
@@ -71,7 +83,8 @@ const page = () => {
         />
       </div>
     </div>
+    </div>
   );
 };
 
-export default page;
+export default page
