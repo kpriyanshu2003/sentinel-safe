@@ -38,11 +38,15 @@ const Sidebar = ({
 
   return (
     <div
-      className={`w-full absolute p-8 bg-gray-900 text-white transition-all duration-300  ${
+      className={`absolute p-8 bg-gray-900 text-white transition duration-300  ${
         collapsed
-          ? "md:translate-x-full translate-y-full md:translate-y-0"
-          : " place-content-start md:translate-x-0 translate-y-0 md:translate-y-0"
-      } md:right-0 md:h-full md:w-[25vw] bottom-0 h-[80vh] w-screen`}
+          ? "translate-x-full hidden"
+          : "grid place-content-start translate-x-0"
+      } ${
+        isAboveMediumScreens
+          ? "right-0 h-full w-[25vw]"
+          : "bottom-0 h-[75vh] w-screen"
+      }`}
     >
       <CloseIcon
         sx={{
