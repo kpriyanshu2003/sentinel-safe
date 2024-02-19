@@ -1,11 +1,21 @@
 from dotenv import load_dotenv
+import requests
+import os
+import csv
+from model.function.brightness_test import is_light_or_dark
+from model.function.counter import count_people_in_video
+import json
 
 load_dotenv()
 
-from model.function.brightness_test import is_light_or_dark
-# from counter import 
-# from feedback_analysis import 
-
 lightSts = is_light_or_dark("resource/night-photo.png", 0.4, 'average')
-# peopleCount = 
-# feedBack =
+count = count_people_in_video("resource/CrowdVideo.mp4", "resource/yolov5su.pt")
+
+
+# allGeoCode = requests.get(f"{os.getenv('SERVER_URL')}/geo")
+allGeoCode = requests.get(f"{os.getenv('SERVER_URL')}/geo")
+for d in allGeoCode.json():
+    print(d)
+
+print(lightSts)
+print(count)
