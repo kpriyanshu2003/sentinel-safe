@@ -51,40 +51,40 @@ const page = () => {
     if (user) {
       const username = user.displayName;
       console.log("Username: ", username);
-    } })
+    }
+  });
   const handleClose = () => setOpen(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
-  
-  return (  
-   
+
+  return (
     <div className="h-screen w-screen overflow-hidden">
       <Navbar />
       <Toaster />
       <div className="relative flex h-[92.5vh] md:flex-col md:h-[86vh bg-green-300">
         {/* <Location /> */}
-      <div
-        className={`relative ${
-          isAboveMediumScreens ? "flex h-[92.5vh]" : "flex flex-col h-[86vh]"
-        } flex bg-green-300  `}
-      >
-        <MenuIcon
-          onClick={() => setCollapsed(!collapsed)}
-          sx={{ fontSize: "40px" }}
-          className="hover:text-green-200 bg-gray-900 text-white p-2 rounded-lg  cursor-pointer absolute top-5 right-5"
-        />
-        <Sidebar
-          handleClose={handleClose}
-          handleOpen={handleOpen}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          reviews={reviews}
-          open={open}
-          setOpen={setOpen}
-        />
+        <div
+          className={`relative ${
+            isAboveMediumScreens ? "flex h-[92.5vh]" : "flex flex-col h-[86vh]"
+          } flex bg-green-300  `}
+        >
+          <MenuIcon
+            onClick={() => setCollapsed(!collapsed)}
+            sx={{ fontSize: "40px" }}
+            className="hover:text-green-200 bg-gray-900 text-white p-2 rounded-lg  cursor-pointer absolute top-5 right-5"
+          />
+          <Sidebar
+            handleClose={handleClose}
+            handleOpen={handleOpen}
+            collapsed={collapsed}
+            setCollapsed={setCollapsed}
+            reviews={reviews}
+            open={open}
+            setOpen={setOpen}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 };
 
-export default page
+export default page;

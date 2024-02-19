@@ -58,17 +58,34 @@ export async function createLocMetrics(req: Request, res: Response) {
 
 export async function updateLocMetrics(req: Request, res: Response) {
   try {
-    const { avgSpeed, peopleCount, campusName, lumen }: LocMetrics = req.body;
-    if (!avgSpeed || !peopleCount || !campusName || !lumen)
+    const {
+      avgSpeed,
+      peopleCount,
+      campusName,
+      lumen,
+      latitude,
+      longitude,
+    }: LocMetrics = req.body;
+    if (
+      !avgSpeed ||
+      !peopleCount ||
+      !campusName ||
+      !lumen ||
+      !latitude ||
+      !longitude ||
+      !req.params.id
+    )
       return res
         .status(400)
         .send(
           new CustomResponse(
-            "Field Required: avgSpeed, peopleCount, campusName, lumen"
+            "Field Required: avgSpeed, peopleCount, campusName, lumen, latitude, longitude, id"
           )
         );
     const speedPeople = await prisma.locMetrics.update({
-      where: { campusName: campusName },
+      where: {
+        id: req.params.id,
+      },
       data: {
         avgSpeed: avgSpeed,
         peopleCount: peopleCount,
@@ -110,7 +127,7 @@ export async function getLocMetricsByCampus(req: Request, res: Response) {
       return res
         .status(400)
         .send(new CustomResponse("Campus Name is required"));
-    const speedPeople = await prisma.locMetrics.findUnique({
+    const speedPeople = await prisma.locMetrics.findMany({
       where: { campusName: req.params.id },
     });
     if (!speedPeople)
@@ -201,12 +218,16 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
   }
 }
 
+// sort updated at in descending order
+// group by campusName
+// get the first element of each group
 export async function getLatestData(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res.status(400).send(new CustomResponse("ID is required"));
-    const speedPeople = await prisma.locMetrics.findMany({
-      where: { updatedAt: { gt: new Date(Date.now() - 1000 * 60 * 60 * 24) } },
+    const speedPeople = await prisma.locMetrics.groupBy({
+      by: ["campusName", "updatedAt"],
+      _count: { _all: true },
+      orderBy: { updatedAt: "desc" },
+      take: 1,
     });
     if (!speedPeople)
       return res
