@@ -6,7 +6,7 @@ from function.brightness import is_light_or_dark
 from function.counter import count_people_in_video
 
 load_dotenv()
-# Gets all codes from the server, runs model on each geoCode, and posts a request to the server
+
 allGeoCode = requests.get(f"{os.getenv('SERVER_URL')}/geo")
 geoCodeData = allGeoCode.json()["data"]
 for geoCodes in geoCodeData:
@@ -20,8 +20,8 @@ for geoCodes in geoCodeData:
             "peopleCount": int(json.loads(count)["peopleCount"]),
             "avgSpeed": float(json.loads(count)["avgSpeed"]),
             "campusName": geoCodes["campusName"],
-            "latitude": float(geoCodes["latitude"]),
-            "longitude": float(geoCodes["longitude"]),
+            "latitude": geoCodes["latitude"],
+            "longitude": geoCodes["longitude"],
         },
     )
     print(r.json())
