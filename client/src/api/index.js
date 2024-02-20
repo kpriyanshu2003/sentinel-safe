@@ -8,3 +8,5 @@ export const generateOTP = (data) =>
 
 export const verifyOTP = (data) => url.get(`/auth/verify-otp?code=${data}`);
 
+
+

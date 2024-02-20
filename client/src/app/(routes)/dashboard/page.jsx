@@ -1,20 +1,19 @@
-"use client";
+"use client"
 import { auth } from "@/firebase.config";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Dashboard/Navbar";
 import MenuIcon from "@mui/icons-material/Menu";
-import { getReviews } from "@/components/Dashboard/addReviews";
+import { getReviews } from "@/app/lib/addReviews";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Dashboard/Sidebar";
 import { Toaster } from "react-hot-toast";
-// import Location from "@/components/Location";
+import Location from "@/components/Dashboard/Location";
 const page = () => {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
   const [open, setOpen] = React.useState(false);
   const [reviews, setReviews] = useState();
-
   useEffect(() => {
     getReviews()
       .then((reviewsData) => {
@@ -58,8 +57,9 @@ const page = () => {
     <div className="h-screen w-screen overflow-hidden">
       <Navbar />
       <Toaster />
-      {/* <Location /> */}
+ 
       <div className="relative flex xl:flex-row xl:h-[92.5vh] flex-col h-[86vh] bg-green-300 ">
+             <Location />
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{ fontSize: "40px" }}
@@ -77,6 +77,7 @@ const page = () => {
       </div>
     </div>
   );
+
 };
 
 export default page;
