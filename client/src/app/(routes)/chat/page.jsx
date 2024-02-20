@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import React, { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/firebase.config";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Dashboard/Navbar";
 
 function Page() {
   const [chat, setChat] = useState("");
