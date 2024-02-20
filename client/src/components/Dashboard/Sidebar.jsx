@@ -1,19 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import Reviews from "../Reviews";
+import Reviews from "./Reviews";
 import TextField from "@mui/material/TextField";
 import Accordion from "@mui/material/Accordion";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import addReviews from "./addReviews";
+import addReviews from "../../app/lib/addReviews";
 import toast, { Toaster } from "react-hot-toast";
 import Metrics from "./metrics";
+import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
 import { useMediaQuery } from "@mui/material";
+import { getMetricsHighlighted } from "@/zustand/store";
 
 const Sidebar = ({
   handleOpen,
@@ -26,15 +28,34 @@ const Sidebar = ({
 }) => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [expanded, setExpanded] = useState(true);
+  const [value, setValue] = useState(2.5);
+  const labels = {
+    1: "Not Safe+",
+    2: "Poor",
+    3: "Neutral",
+    4: "Safe",
+    5: "Excellent",
+  };
+  function getLabelText(value) {
+    return labels[value];
+  }
 
   const [inputValue, setInputValue] = useState({
     location: "",
     review: "",
     name: "",
+    email: "",
   });
+  const [metrics, setMetrics] = useState();
   const handleAccordionToggle = () => {
     setExpanded(!expanded);
   };
+  const bears = getMetricsHighlighted((state) => state);
+  useEffect(
+    () => setMetrics(bears[0]),
+
+    [bears]
+  );
 
   return (
     <div
@@ -57,7 +78,19 @@ const Sidebar = ({
         onClick={() => setCollapsed(!collapsed)}
         className="hover:text-green-200 cursor-pointer"
       />
-      <Metrics />
+
+      <div className="border flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
+        {metrics ? (
+          <Metrics
+            peopleCount={bears[0].peopleCount}
+            avgSpeed={bears[0].avgSpeed}
+          />
+        ) : (
+          <Typography>
+            Click on the highlighted area to fetch current metrics !{" "}
+          </Typography>
+        )}
+      </div>
       <Accordion
         defaultExpanded
         onChange={handleAccordionToggle}
@@ -76,13 +109,15 @@ const Sidebar = ({
           Overview
         </AccordionSummary>
         <AccordionDetails
-          className="outline-transparent border-transparent overflow-y-scroll p-3"
+          className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
           style={{ background: "#f1f1f194" }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
-          dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
-          lacus ex, sit amet blandit leo lobortis eget.
+          <Rating name="read-only" value={value} precision={0.1} readOnly />
+          {value !== null && (
+            <Typography className="font-extralight">
+              {labels[Math.floor(value)]} safety conditions
+            </Typography>
+          )}
         </AccordionDetails>
       </Accordion>
       <div className="mb-4">
@@ -135,6 +170,15 @@ const Sidebar = ({
           />
           <TextField
             id="outlined-basic"
+            label="Email"
+            required
+            variant="outlined"
+            onChange={(event) =>
+              setInputValue({ ...inputValue, email: event.target.value })
+            }
+          />
+          <TextField
+            id="outlined-basic"
             label="Location"
             required
             variant="outlined"
@@ -164,7 +208,8 @@ const Sidebar = ({
                 toast.error("Please fill all the details!");
               } else {
                 addReviews({
-                  location: inputValue.location,
+                  campusName: inputValue.location,
+                  email: inputValue.email,
                   name: inputValue.name,
                   review: inputValue.review,
                 });

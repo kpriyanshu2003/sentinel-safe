@@ -1,6 +1,6 @@
 export interface GeoCode {
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   campusName: string;
   camId: string;
 }

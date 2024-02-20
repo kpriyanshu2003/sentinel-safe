@@ -1,10 +1,5 @@
 import cv2
 import numpy as np
-import requests
-
-
-url = 'https://sentinel-safe-backend.vercel.app/'
-# r = requests.get(url)
 
 def is_light_or_dark(image_path, threshold=0.5, mode="average"):
     
@@ -26,18 +21,18 @@ def is_light_or_dark(image_path, threshold=0.5, mode="average"):
     else:
         raise ValueError(f"Invalid mode: {mode}. Valid options are 'average', 'luma', 'contrast'.")
 
-    return brightness < threshold
+    return brightness > threshold
 
 
 
 # Example usage:
-image_path = r"../resource/night-photo.png"
-threshold = 0.4
-mode = "average"
+# image_path = r"../resource/night-photo.png"
+#threshold = 0.4
+# mode = "average"
 
 # is_light_or_dark is a function
-is_dark = is_light_or_dark(image_path, threshold, mode)
-print(is_dark)
+# is_dark = is_light_or_dark(image_path, threshold, mode)
+# print(is_dark)
 
-post = requests.post(url, json= {"Brightness" : bool(is_dark)})
+# post = requests.post(url, json= {"Brightness" : bool(is_dark)})
 # print(post.json())

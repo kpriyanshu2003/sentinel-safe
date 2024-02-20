@@ -18,6 +18,7 @@ import prismaRoutes from "./src/routes/prisma";
 import locMetricsRoutes from "./src/routes/locmetrics";
 import getCodeRoutes from "./src/routes/geoCode";
 import { ChatMessage } from "./src/@types/ChatMessage";
+import initRoutes from "./src/routes/init";
 
 app.use(compress());
 app.use(cors({ origin: "*" }));
@@ -35,6 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/prisma", prismaRoutes);
 app.use("/locmetrics", locMetricsRoutes);
 app.use("/geo", getCodeRoutes);
+app.use("/init", initRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({
