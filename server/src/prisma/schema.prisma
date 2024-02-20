@@ -19,7 +19,7 @@ model User {
 
 model LocMetrics {
   id          String   @id @default(uuid())
-  campusName  String   @unique
+  campusName  String
   latitude    String   @default("0")
   longitude   String   @default("0")
   lumen       Boolean  @default(false)
