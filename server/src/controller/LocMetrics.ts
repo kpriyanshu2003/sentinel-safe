@@ -15,21 +15,21 @@ export async function createLocMetrics(req: Request, res: Response) {
       latitude,
       longitude,
     }: LocMetrics = req.body;
-    if (
-      !avgSpeed ||
-      !peopleCount ||
-      !campusName ||
-      !lumen ||
-      !latitude ||
-      !longitude
-    )
-      return res
-        .status(400)
-        .send(
-          new CustomResponse(
-            "Field Required: avgSpeed, peopleCount, campusName, lumen, latitude, longitude"
-          )
-        );
+    // if (
+    //   !avgSpeed ||
+    //   !peopleCount ||
+    //   !lumen ||
+    //   !latitude ||
+    //   !longitude ||
+    //   !campusName
+    // )
+    //   return res
+    //     .status(400)
+    //     .send(
+    //       new CustomResponse(
+    //         "Field Required: avgSpeed, peopleCount, campusName, lumen, latitude, longitude"
+    //       )
+    //     );
     const risk = getRisk(avgSpeed, peopleCount, lumen);
     const speedPeople = await prisma.locMetrics.create({
       data: {
@@ -58,27 +58,44 @@ export async function createLocMetrics(req: Request, res: Response) {
 
 export async function updateLocMetrics(req: Request, res: Response) {
   try {
-    const { avgSpeed, peopleCount, campusName, lumen }: LocMetrics = req.body;
-    if (!avgSpeed || !peopleCount || !campusName || !lumen)
-      return res
-        .status(400)
-        .send(
-          new CustomResponse(
-            "Field Required: avgSpeed, peopleCount, campusName, lumen"
-          )
-        );
+    const {
+      avgSpeed,
+      peopleCount,
+      campusName,
+      lumen,
+      latitude,
+      longitude,
+    }: LocMetrics = req.body;
+    // if (
+    //   !avgSpeed ||
+    //   !peopleCount ||
+    //   !campusName ||
+    //   !lumen ||
+    //   !latitude ||
+    //   !longitude ||
+    //   !req.params.id
+    // )
+    //   return res
+    //     .status(400)
+    //     .send(
+    //       new CustomResponse(
+    //         "Field Required: avgSpeed, peopleCount, campusName, lumen, latitude, longitude, id"
+    //       )
+    //     );
     const speedPeople = await prisma.locMetrics.update({
-      where: { campusName: campusName },
+      where: {
+        id: req.params.id,
+      },
       data: {
         avgSpeed: avgSpeed,
         peopleCount: peopleCount,
         lumen: lumen,
       },
     });
-    if (!speedPeople)
-      return res
-        .status(400)
-        .send(new CustomResponse("Location Metrics not updated"));
+    // if (!speedPeople)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Location Metrics not updated"));
     res
       .status(201)
       .send(new CustomResponse("Location Metrics updated", speedPeople));
@@ -106,11 +123,11 @@ export async function getLocMetrics(req: Request, res: Response) {
 
 export async function getLocMetricsByCampus(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res
-        .status(400)
-        .send(new CustomResponse("Campus Name is required"));
-    const speedPeople = await prisma.locMetrics.findUnique({
+    // if (!req.params.id)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Campus Name is required"));
+    const speedPeople = await prisma.locMetrics.findMany({
       where: { campusName: req.params.id },
     });
     if (!speedPeople)
@@ -128,10 +145,10 @@ export async function getLocMetricsByCampus(req: Request, res: Response) {
 
 export async function getLocMetricsByRisk(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res
-        .status(400)
-        .send(new CustomResponse("Risk Rating is required"));
+    // if (!req.params.id)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Risk Rating is required"));
     const riskRating = Number(req.params.id);
     const speedPeople = await prisma.locMetrics.findMany({
       where: { riskRating: { gt: riskRating } },
@@ -151,8 +168,8 @@ export async function getLocMetricsByRisk(req: Request, res: Response) {
 
 export async function getLocMetricsbyTime(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res.status(400).send(new CustomResponse("ID is required"));
+    // if (!req.params.id)
+    //   return res.status(400).send(new CustomResponse("ID is required"));
     const speedPeople = await prisma.locMetrics.findMany({
       where: { updatedAt: { gt: req.params.id } },
     });
@@ -171,10 +188,10 @@ export async function getLocMetricsbyTime(req: Request, res: Response) {
 
 export async function getLocMetricsByCoordinates(req: Request, res: Response) {
   try {
-    if (!req.params.latitude || !req.params.longitude)
-      return res
-        .status(400)
-        .send(new CustomResponse("Latitude and Longitude are required"));
+    // if (!req.params.latitude || !req.params.longitude)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Latitude and Longitude are required"));
     const { latitude, longitude }: Pick<LocMetrics, "latitude" | "longitude"> =
       req.params as unknown as LocMetrics;
     const speedPeople = await prisma.locMetrics.findFirst({
@@ -201,12 +218,16 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
   }
 }
 
+// sort updated at in descending order
+// group by campusName
+// get the first element of each group
 export async function getLatestData(req: Request, res: Response) {
   try {
-    if (!req.params.id)
-      return res.status(400).send(new CustomResponse("ID is required"));
-    const speedPeople = await prisma.locMetrics.findMany({
-      where: { updatedAt: { gt: new Date(Date.now() - 1000 * 60 * 60 * 24) } },
+    const speedPeople = await prisma.locMetrics.groupBy({
+      by: ["campusName", "updatedAt"],
+      _count: { _all: true },
+      orderBy: { updatedAt: "desc" },
+      take: 1,
     });
     if (!speedPeople)
       return res
