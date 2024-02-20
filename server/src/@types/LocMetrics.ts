@@ -1,7 +1,7 @@
 export interface LocMetrics {
   campusName: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   lumen: boolean;
   peopleCount: number;
   avgSpeed: number;
