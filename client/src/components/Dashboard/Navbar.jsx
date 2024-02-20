@@ -23,7 +23,7 @@ const Navbar = () => {
       setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
 
-  console.log(userDetails);
+
   const handleClose = () => {
     setAnchorEl(null);
   };

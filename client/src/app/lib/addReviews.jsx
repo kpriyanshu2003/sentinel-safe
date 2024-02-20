@@ -13,10 +13,12 @@ const colRef = collection(db, "reviews");
 const addReviews = async (props) => {
   try {
     await addDoc(colRef, {
-      location: props.location,
-      review: props.review,
+      campusName: props.location,
+      email: props.email,
       name: props.name,
-      timestamp: new Date(),
+      review: props.review,
+      sentiment: 2.5,
+      updatedAt: new Date(),
     });
 
     console.log("Added review");
