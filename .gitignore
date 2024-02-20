@@ -40,3 +40,5 @@ next-env.d.ts
 yolo*
 *.csv
 .idea
+__pycache__
+serviceAccount.json

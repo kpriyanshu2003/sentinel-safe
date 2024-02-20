@@ -19,7 +19,7 @@ router.get("/t/:id", getLocMetricsbyTime);
 router.get("/o/", getLocMetricsByCoordinates);
 router.get("/l/", getLatestData);
 router.post("/", createLocMetrics);
-router.patch("/", updateLocMetrics);
+router.patch("/:id", updateLocMetrics);
 router.delete("/:id", deleteLocMetrics);
 
 export default router;
