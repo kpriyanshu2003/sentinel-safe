@@ -276,11 +276,11 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
 // get the first element of each group
 export async function getLatestData(req: Request, res: Response) {
   try {
-    const speedPeople = await prisma.locMetrics.groupBy({
-      by: ["campusName", "updatedAt"],
-      _count: { _all: true },
-      orderBy: { updatedAt: "desc" },
-      take: 1,
+    const speedPeople = await prisma.locMetrics.findMany({
+      orderBy: {
+        updatedAt: "desc", // Sort by updatedAt field in descending order
+      },
+      distinct: ["campusName"], // Retrieve distinct campus names
     });
     if (!speedPeople)
       return res
