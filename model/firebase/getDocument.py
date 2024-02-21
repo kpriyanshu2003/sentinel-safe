@@ -1,4 +1,4 @@
-from firestore import db
+from firebase.firestore import db
 
 
 def getAllCollections():
@@ -27,9 +27,3 @@ def updateDocument(collection, docId, data):
 def deleteDocument(collection, docId):
     db.collection(collection).document(docId).delete()
     return True
-
-
-# rev = getAllDocuments("Campus 12")
-# updateDocument("reviews", "V5LzbwukukLiVYXaMU7I", {"sentiment":value})
-# value = from_feedback Model
-# r = requests.patch(SERVER_URL/"Campus 12", json = {"sentiment":avgValue})
