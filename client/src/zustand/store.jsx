@@ -1,22 +1,21 @@
-
-const url=process.env.NEXT_PUBLIC_serverUrl
+const url = process.env.NEXT_PUBLIC_serverUrl;
 import create from "zustand";
+
 export const useStore = create((set) => ({
-    latitude: null,
-    longitude: null,
-    update: (latitude, longitude) => set({ latitude, longitude }),
-  }));
+  latitude: null,
+  longitude: null,
+  sourceName: null,
+  update: (latitude, longitude, sourceName) =>
+    set({ latitude, longitude, sourceName }),
+}));
 
- 
-  export const getMetricsHighlighted = create((set) => ({
-    
-    fetchData: async (latitude,longitude) => {
-      const response = await fetch(`${url}/locmetrics`);
-      // const response = await fetch(`${url}/locmetrics/o/?latitude=${latitude}&longitude=${longitude}`);
-      const data = await response.json();
-     console.log("Data",data.data);
-     const metrics = data.data;
-      set(metrics);
-    }
-  }));
-
+export const getMetricsHighlighted = create((set) => ({
+  fetchData: async (sourceName) => {
+    const response = await fetch(`${url}/locmetrics`);
+    const data = await response.json();
+    const metrics = data.data;
+    metrics.map((info) => {
+      if (sourceName == info.id) set(info);
+    });
+  },
+}));
