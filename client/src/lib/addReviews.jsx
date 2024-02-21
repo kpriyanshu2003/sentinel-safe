@@ -1,4 +1,4 @@
-import { db } from "../../firebase.config";
+import { db } from "../firebase.config";
 import {
   collection,
   getDocs,
@@ -9,20 +9,19 @@ import {
   limit,
 } from "firebase/firestore";
 
-const colRef = collection(db, "reviews");
 const addReviews = async (props) => {
+  const colRef = collection(db, props.location);
   try {
     await addDoc(colRef, {
-      campusName: props.location,
       email: props.email,
       name: props.name,
       review: props.review,
-      sentiment: 2.5,
+      sentiment: null,
       updatedAt: new Date(),
     });
 
     console.log("Added review");
-    deleterecord();
+    deleterecord({ location: props.location });
   } catch {
     console.log("Error adding review");
   }
@@ -31,26 +30,29 @@ const addReviews = async (props) => {
 export default addReviews;
 
 export const getReviews = async (props) => {
-  try {
-    const querySnapshot = await getDocs(colRef);
-    let reviews = [];
+  if (props.location) {
+    const colRef = collection(db, props.location);
+    try {
+      const querySnapshot = await getDocs(colRef);
+      let reviews = [];
 
-    querySnapshot.forEach((doc) => {
-      reviews.push({ ...doc.data(), id: doc.id });
-    });
+      querySnapshot.forEach((doc) => {
+        reviews.push({ ...doc.data(), id: doc.id });
+      });
 
-    const first20Reviews = reviews.slice(0, 20);
+      const first20Reviews = reviews.slice(0, 20);
 
-    return first20Reviews;
-  } catch (err) {
-    console.log(err);
-    throw err;
+      return first20Reviews;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 };
-
-async function deleterecord() {
+const deleterecord = async (props) => {
+  const colRef = collection(db, props.location);
   try {
-    const MAX_RECORDS = 5;
+    const MAX_RECORDS = 10;
 
     const querySnapshot = await getDocs(colRef);
     const totalRecords = querySnapshot.size;
@@ -71,4 +73,4 @@ async function deleterecord() {
   } catch (error) {
     console.error("Error deleting old records:", error);
   }
-}
+};
