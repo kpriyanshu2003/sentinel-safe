@@ -12,11 +12,12 @@ const Location = ({ data }) => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_mapAccessToken;
     const map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/streets-v12",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [85.8161, 20.3555], // starting position [lng, lat]
       zoom: 15,
       // maxBounds: boundsN
     });
+    
 
     const createGeoJSONCircle = function (center, radiusInKm, points) {
       if (!points) points = 64;
@@ -73,8 +74,6 @@ const Location = ({ data }) => {
       fetch("https://sentinel-safe-backend.vercel.app/locmetrics")
         .then((response) => response.json())
         .then((responseData) => {
-          console.log("Response Data:", responseData.data);
-
           const polygonCoordinates = responseData.data.map((item) => ({
             coordinates: [
               parseFloat(item.longitude),
@@ -92,7 +91,6 @@ const Location = ({ data }) => {
             (item) => item.source
           );
           const coordinatesColor = polygonCoordinates.map((item) => item.color);
-          console.log("Coordinates Arraydddd:", coordinatesArray);
 
           coordinatesArray.forEach((coord, index) => {
             const sourceName = coordinatesSource[index];
@@ -129,12 +127,6 @@ const Location = ({ data }) => {
           throw error;
         });
     });
-
-    // map.on("click", function (e) {
-    //   const clickedCoords = e.lngLat.toArray();
-    //   updateCoordinates(clickedCoords);
-    //   const marker = new mapboxgl.Marker().setLngLat(clickedCoords).addTo(map);
-    // });
 
     return () => map.remove();
   }, []);
