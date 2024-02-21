@@ -7,7 +7,6 @@ import { useStore } from "@/zustand/store";
 import { getMetricsHighlighted } from "@/zustand/store";
 const Location = ({ data }) => {
   const update = useStore((state) => state.update);
-  // const { fetchData } = getMetricsHighlighted();
   const state = getMetricsHighlighted();
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_mapAccessToken;
@@ -77,34 +76,26 @@ const Location = ({ data }) => {
           console.log("Response Data:", responseData.data);
 
           const polygonCoordinates = responseData.data.map((item) => ({
-            coordinates: [item.longitude, item.latitude],
+            coordinates: [
+              parseFloat(item.longitude),
+              parseFloat(item.latitude),
+            ],
             color: item.color,
+            source: item.id,
           }));
 
           const coordinatesArray = polygonCoordinates.map(
             (item) => item.coordinates
           );
 
+          const coordinatesSource = polygonCoordinates.map(
+            (item) => item.source
+          );
           const coordinatesColor = polygonCoordinates.map((item) => item.color);
           console.log("Coordinates Arraydddd:", coordinatesArray);
-          // const polygonCoordinatesss = [
-          //   [20.354031,85.812629],
-          //   [20.3539,85.8136 ],
-          //   [20.356502,85.827579],
-          //   [20.353293,85.810526 ],
-          // ];
-          const polygonCoordinatesss = [
-            [85.812629, 20.354031],
-            [85.8136, 20.3539],
-            [85.827579, 20.356502],
-            [85.810526, 20.353293],
-          ];
 
-          const coordinatesColorrr = ["#06be06", "#03036c", "#0ed1f6", "red"];
-
-          console.log("Coordinates:", polygonCoordinatesss);
-          polygonCoordinatesss.forEach((coord, index) => {
-            const sourceName = `polygon${index}`;
+          coordinatesArray.forEach((coord, index) => {
+            const sourceName = coordinatesSource[index];
             map.addSource(sourceName, createGeoJSONCircle(coord, 0.1));
 
             map.addLayer({
@@ -113,41 +104,21 @@ const Location = ({ data }) => {
               source: sourceName,
               layout: {},
               paint: {
-                "fill-color": coordinatesColorrr[index],
+                "fill-color": coordinatesColor[index],
                 "fill-opacity": 0.4,
               },
             });
 
             map.on("click", sourceName, function (e) {
               const centerCoordinates = e.lngLat.toArray();
-
+              console.log("source Name:", sourceName);
               console.log("Center Coordinates:", centerCoordinates);
-              // const state = getMetricsHighlighted();
-              // const displayMetrics = state.fetchData(
-              //   centerCoordinates[1],
-              //   centerCoordinates[0]
-              // );
-              // console.log("display Metrics:", displayMetrics);
-              state.fetchData(centerCoordinates[1], centerCoordinates[0]);
-              for (let i = 0; i < polygonCoordinates.length; i++) {
-                const coord = polygonCoordinates[i];
-                console.log(
-                  "Coordinates loop:",
-                  coord.coordinates[0],
-                  coord.coordinates[1]
-                );
-                if (
-                  coord.coordinates[0] === centerCoordinates[0] &&
-                  coord.coordinates[1] === centerCoordinates[1]
-                ) {
-                  console.log("Match");
-                  getMetricsHighlighted
-                    .getState()
-                    .fetchData(centerCoordinates[1], centerCoordinates[0]);
-                  return;
-                }
-              }
+              updateCoordinates(centerCoordinates, sourceName);
+              const marker = new mapboxgl.Marker()
+                .setLngLat(centerCoordinates)
+                .addTo(map);
 
+              state.fetchData(sourceName);
               // If no match found
               console.log("No match found for the clicked coordinates.");
             });
@@ -159,11 +130,11 @@ const Location = ({ data }) => {
         });
     });
 
-    map.on("click", function (e) {
-      const clickedCoords = e.lngLat.toArray();
-      updateCoordinates(clickedCoords);
-      const marker = new mapboxgl.Marker().setLngLat(clickedCoords).addTo(map);
-    });
+    // map.on("click", function (e) {
+    //   const clickedCoords = e.lngLat.toArray();
+    //   updateCoordinates(clickedCoords);
+    //   const marker = new mapboxgl.Marker().setLngLat(clickedCoords).addTo(map);
+    // });
 
     return () => map.remove();
   }, []);
@@ -171,9 +142,6 @@ const Location = ({ data }) => {
   const updateCoordinates = (clickedCoords) => {
     update(clickedCoords[1], clickedCoords[0]);
   };
-
-  const bears = useStore((state) => state);
-  console.log("clicked:", bears);
 
   return (
     <div id="map" className={`w-full h-full transition-all duration-500`}></div>

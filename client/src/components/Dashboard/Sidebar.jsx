@@ -3,31 +3,31 @@ import Typography from "@mui/material/Typography";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import Reviews from "./Reviews";
 import TextField from "@mui/material/TextField";
 import Accordion from "@mui/material/Accordion";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import addReviews from "../../app/lib/addReviews";
+import addReviews, { getReviews } from "../../app/lib/addReviews";
 import toast, { Toaster } from "react-hot-toast";
 import Metrics from "./metrics";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
-import { useMediaQuery } from "@mui/material";
-import { getMetricsHighlighted } from "@/zustand/store";
-
+import { getMetricsHighlighted, useStore } from "@/zustand/store";
+import Image from "next/image";
+import Reviews from "./Reviews";
 const Sidebar = ({
   handleOpen,
   handleClose,
   collapsed,
   setCollapsed,
-  reviews,
   setOpen,
   open,
 }) => {
-  const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const { latitude, longitude } = useStore();
   const [expanded, setExpanded] = useState(true);
+
+  const [reviews, setReviews] = useState();
   const [value, setValue] = useState(2.5);
   const labels = {
     1: "Not Safe+",
@@ -36,9 +36,6 @@ const Sidebar = ({
     4: "Safe",
     5: "Excellent",
   };
-  function getLabelText(value) {
-    return labels[value];
-  }
 
   const [inputValue, setInputValue] = useState({
     location: "",
@@ -47,27 +44,42 @@ const Sidebar = ({
     email: "",
   });
   const [metrics, setMetrics] = useState();
+
   const handleAccordionToggle = () => {
     setExpanded(!expanded);
   };
   const bears = getMetricsHighlighted((state) => state);
-  useEffect(
-    () => setMetrics(bears[0]),
+  const fetchReviews = async (location) => {
+    try {
+      const reviewsData = await getReviews({ location });
+      return reviewsData;
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      return null;
+    }
+  };
+  useEffect(() => {
+    setMetrics(bears);
 
-    [bears]
-  );
+    const fetchData = async () => {
+      if (latitude && metrics) {
+        const reviewsData = await fetchReviews(metrics.campusName);
+        setReviews(reviewsData);
+      } else {
+        setReviews(null);
+      }
+    };
+
+    fetchData();
+  }, [bears, latitude, metrics]);
 
   return (
     <div
-      className={`absolute p-8 bg-gray-900 text-white transition duration-300  ${
+      className={`absolute p-8 bg-gray-900 text-white transition duration-300 bottom-0 h-[75vh] w-full ${
         collapsed
           ? "translate-x-full hidden"
           : "grid place-content-start translate-x-0"
-      } ${
-        isAboveMediumScreens
-          ? "right-0 h-full w-[25vw]"
-          : "bottom-0 h-[75vh] w-screen"
-      }`}
+      } lg:right-0 lg:h-full lg:w-[25vw]`}
     >
       <CloseIcon
         sx={{
@@ -80,10 +92,10 @@ const Sidebar = ({
       />
 
       <div className="border flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
-        {metrics ? (
+        {latitude ? (
           <Metrics
-            peopleCount={bears[0].peopleCount}
-            avgSpeed={bears[0].avgSpeed}
+            peopleCount={metrics.peopleCount}
+            avgSpeed={metrics.avgSpeed}
           />
         ) : (
           <Typography>
@@ -112,35 +124,67 @@ const Sidebar = ({
           className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
           style={{ background: "#f1f1f194" }}
         >
-          <Rating name="read-only" value={value} precision={0.1} readOnly />
-          {value !== null && (
-            <Typography className="font-extralight">
-              {labels[Math.floor(value)]} safety conditions
-            </Typography>
-          )}
+          <Typography className="font-extralight flex items-center justify-center gap-1">
+            {longitude ? (
+              <>
+                {" "}
+                <Rating
+                  name="read-only"
+                  value={value}
+                  precision={0.1}
+                  readOnly
+                />
+                {labels[Math.floor(metrics.sentiment)]}
+              </>
+            ) : (
+              "Click on the highlighted area to fetch"
+            )}{" "}
+            safety conditions
+          </Typography>
         </AccordionDetails>
       </Accordion>
       <div className="mb-4">
-        <h3 className="mt-2 text-green-400 text-lg font-semibold ">
-          User Reviews
-        </h3>
+        {reviews && (
+          <h3 className="mt-2 text-green-400 text-lg font-semibold ">
+            User Reviews
+          </h3>
+        )}
         <div
           className={`cursor-default overflow-y-scroll my-2 ${
-            isAboveMediumScreens
-              ? expanded
-                ? "h-64"
-                : "h-96"
-              : expanded
-              ? "h-40"
-              : "h-52"
+            expanded ? "lg:h-64 h-full" : "lg:h-96 h-full"
           }`}
         >
-          {reviews &&
+          {reviews ? (
             reviews.map((review, index) => (
               <div key={index} className="review">
                 <Reviews review={review} />
               </div>
-            ))}
+            ))
+          ) : (
+            <div
+              className="items-center flex 
+               h-full
+              flex-col justify-center"
+            >
+              <Image
+                src="/image.png"
+                className="hidden lg:flex"
+                style={{ objectFit: "contain" }}
+                width={150}
+                height={200}
+              />
+              <Image
+                src="/location.gif"
+                className="lg:hidden flex"
+                style={{ objectFit: "contain" }}
+                width={150}
+                height={80}
+              />
+              <Typography className="text-center text-green-400 font-semibold">
+                Empowering Communities, Ensuring your Safety{" "}
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
 
@@ -179,8 +223,8 @@ const Sidebar = ({
           />
           <TextField
             id="outlined-basic"
-            label="Location"
-            required
+            label={metrics.campusName}
+            disabled
             variant="outlined"
             onChange={(event) =>
               setInputValue({ ...inputValue, location: event.target.value })
@@ -207,12 +251,13 @@ const Sidebar = ({
               ) {
                 toast.error("Please fill all the details!");
               } else {
-                addReviews({
-                  campusName: inputValue.location,
-                  email: inputValue.email,
-                  name: inputValue.name,
-                  review: inputValue.review,
-                });
+                latitude &&
+                  addReviews({
+                    email: inputValue.email,
+                    name: inputValue.name,
+                    review: inputValue.review,
+                    location: metrics.campusName,
+                  });
                 setOpen(false);
                 toast.success("Thanks for your review!");
               }
@@ -224,7 +269,9 @@ const Sidebar = ({
       </Modal>
       <button
         onClick={handleOpen}
-        className="text-green-400 text-center  w-full absolute bottom-0 justify-center pb-4 mt-4 bg-gray-900 item-center"
+        className={`${
+          latitude ? "text-green-400" : "text-gray-400"
+        } text-center w-full absolute bottom-10 lg:bottom-0 justify-center z-10 pb-4 pt-4 mt-4 bg-gray-900 item-center`}
       >
         ADD REVIEWS <AddCircleOutlineRoundedIcon fontSize="medium" />
       </button>

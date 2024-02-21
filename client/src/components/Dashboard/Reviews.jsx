@@ -4,8 +4,6 @@ import Card from "@mui/material/Card";
 import { getMetricsHighlighted } from "@/zustand/store";
 import { useStore } from "zustand";
 const Reviews = ({ review, points }) => {
-  // const bears = getMetricsHighlighted((state) => state);
-  // console.log("Set:", bears);
   return (
     <Card
       variant="outlined"
@@ -14,7 +12,7 @@ const Reviews = ({ review, points }) => {
       <div className="w-full flex justify-between ">
         <Typography className="font-bold text-sm">{review.name}</Typography>
         <Typography className="font-light text-green-400  text-sm">
-          {review.points}safety points
+          {review.sentiment} sentiment rating
         </Typography>
       </div>
       <p className="opacity-70 text-sm">{review.review}</p>
