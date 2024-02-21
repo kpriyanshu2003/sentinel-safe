@@ -51,7 +51,7 @@ const page = () => {
       <Toaster />
 
       <div className="relative flex xl:flex-row xl:h-[92.5vh] flex-col h-[86vh] bg-green-300 ">
-        <Location />
+{/*         <Location /> */}
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{ fontSize: "40px" }}
