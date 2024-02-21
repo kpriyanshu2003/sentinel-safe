@@ -7,4 +7,5 @@ export interface LocMetrics {
   avgSpeed: number;
   riskRating: number;
   color: string;
+  sentiment: number;
 }

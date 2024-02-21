@@ -65,6 +65,7 @@ export async function updateLocMetrics(req: Request, res: Response) {
       lumen,
       latitude,
       longitude,
+      sentiment,
     }: LocMetrics = req.body;
     // if (
     //   !avgSpeed ||
@@ -96,6 +97,7 @@ export async function updateLocMetrics(req: Request, res: Response) {
         longitude: longitude,
         color: getColor(risk),
         campusName: campusName,
+        sentiment: sentiment,
       },
     });
     // if (!speedPeople)
@@ -113,8 +115,14 @@ export async function updateLocMetrics(req: Request, res: Response) {
 
 export async function updateLocMetricsByCampus(req: Request, res: Response) {
   try {
-    const { avgSpeed, peopleCount, lumen, latitude, longitude }: LocMetrics =
-      req.body;
+    const {
+      avgSpeed,
+      peopleCount,
+      lumen,
+      latitude,
+      longitude,
+      sentiment,
+    }: LocMetrics = req.body;
     // if (!avgSpeed || !peopleCount || !lumen || !req.params.id)
     //   return res
     //     .status(400)
@@ -134,6 +142,7 @@ export async function updateLocMetricsByCampus(req: Request, res: Response) {
         latitude: latitude,
         longitude: longitude,
         color: getColor(risk),
+        sentiment: sentiment,
       },
     });
     // if (!speedPeople)
