@@ -1,4 +1,3 @@
-import csv
 import time
 from ultralytics import YOLO
 import cv2
@@ -92,11 +91,6 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
         "toothbrush",
     ]
 
-    # Initialize CSV file and writer
-    csv_file = open("temp/people_count.csv", mode="w")
-    csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(["Time", "People Count", "Avg Speed"])
-
     start_time = time.time()
     prev_frame_time = start_time
     total_people = 0
@@ -142,9 +136,6 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
             f"People Count: {box_count}, Avg People: {avg_people}, avg_speed: {avg_speed}"
         )
 
-        # Write to CSV file
-        csv_writer.writerow([time.strftime("%Y-%m-%d %H:%M:%S"), box_count, avg_speed])
-
         cv2.putText(
             img,
             f"People: {box_count}, Avg: {avg_people}",
@@ -157,15 +148,4 @@ def count_people_in_video(video_path, model_path="yolov5s.pt"):
 
         cv2.imshow("Image", img)
         cv2.waitKey(1)
-
-    # Close CSV file
-    csv_file.close()
     return json.dumps({"avgSpeed": avg_speed, "peopleCount": avg_people})
-
-    # post = requests.post(url, json={"Average-people-count": box_count, "Average-people-speed": avg_speed})
-
-
-# video_path = "../resource/CrowdVideo.mp4"
-# model_path = "yolov5s.pt"
-# url = 'https://sentinel-safe-backend.vercel.app/'
-# count = count_people_in_video(video_path, model_path, url)

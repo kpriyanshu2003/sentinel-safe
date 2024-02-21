@@ -1,15 +1,13 @@
 python-dotenv
-PyPDF2
 spacy
 ultralytics
 opencv-python
 cvzone
 numpy
-matplotlib
 scipy
 scikit-learn
 pandas
 torch
 firebase-admin
 transformers
-docx
+schedule
