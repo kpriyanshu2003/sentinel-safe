@@ -1,4 +1,12 @@
-from firestore import db
+from firebase.firestore import db
+
+
+def getAllCollections():
+    collections = db.collections()
+    data = []
+    for i in collections:
+        data.append(i.id)
+    return data
 
 
 def getAllDocuments(collection):
