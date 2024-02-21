@@ -2,7 +2,6 @@
 import { auth } from "@/firebase.config";
 import Navbar from "@/components/Dashboard/Navbar";
 import MenuIcon from "@mui/icons-material/Menu";
-import { getReviews } from "@/app/lib/addReviews";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -40,7 +39,6 @@ const page = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const username = user.displayName;
-      console.log("Username: ", username);
     }
   });
   const handleClose = () => setOpen(false);

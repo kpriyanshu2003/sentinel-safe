@@ -75,7 +75,7 @@ const Sidebar = ({
 
   return (
     <div
-      className={`absolute p-8 bg-gray-900 text-white transition duration-300 bottom-0 h-[75vh] w-full ${
+      className={`absolute p-8 bg-gray-900 flex flex-col justify-center text-white transition duration-300 z-10 bottom-0 h-[75vh] w-full ${
         collapsed
           ? "translate-x-full hidden"
           : "grid place-content-start translate-x-0"
@@ -91,7 +91,7 @@ const Sidebar = ({
         className="hover:text-green-200 cursor-pointer"
       />
 
-      <div className="border flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
+      <div className="border  flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
         {latitude ? (
           <Metrics
             peopleCount={metrics.peopleCount}
@@ -143,15 +143,15 @@ const Sidebar = ({
           </Typography>
         </AccordionDetails>
       </Accordion>
-      <div className="mb-4">
+      <div className="mb-4 overflow-y-scroll">
         {reviews && (
-          <h3 className="mt-2 text-green-400 text-lg font-semibold ">
+          <h3 className=" text-green-400 text-lg font-semibold mt-2">
             User Reviews
           </h3>
         )}
         <div
           className={`cursor-default overflow-y-scroll my-2 ${
-            expanded ? "lg:h-64 h-full" : "lg:h-96 h-full"
+            expanded ? "lg:h-64" : "lg:h-96 "
           }`}
         >
           {reviews ? (
@@ -176,7 +176,6 @@ const Sidebar = ({
               <Image
                 src="/location.gif"
                 className="lg:hidden flex"
-                style={{ objectFit: "contain" }}
                 width={150}
                 height={80}
               />
@@ -221,15 +220,17 @@ const Sidebar = ({
               setInputValue({ ...inputValue, email: event.target.value })
             }
           />
-          <TextField
-            id="outlined-basic"
-            label={metrics.campusName}
-            disabled
-            variant="outlined"
-            onChange={(event) =>
-              setInputValue({ ...inputValue, location: event.target.value })
-            }
-          />
+          {metrics && metrics.campusName && (
+            <TextField
+              id="outlined-basic"
+              label={metrics.campusName}
+              disabled
+              variant="outlined"
+              onChange={(event) =>
+                setInputValue({ ...inputValue, location: event.target.value })
+              }
+            />
+          )}
           <TextField
             id="outlined-basic"
             label="Review"
@@ -245,7 +246,7 @@ const Sidebar = ({
             className="bg-green-700"
             onClick={() => {
               if (
-                inputValue.location === "" ||
+                inputValue.email === "" ||
                 inputValue.name === "" ||
                 inputValue.review === ""
               ) {
