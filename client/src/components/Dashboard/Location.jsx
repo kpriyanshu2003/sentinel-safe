@@ -17,7 +17,6 @@ const Location = ({ data }) => {
       zoom: 15,
       // maxBounds: boundsN
     });
-    
 
     const createGeoJSONCircle = function (center, radiusInKm, points) {
       if (!points) points = 64;
@@ -71,7 +70,7 @@ const Location = ({ data }) => {
     map.addControl(geocoder);
 
     map.on("style.load", function () {
-      fetch("https://sentinel-safe-backend.vercel.app/locmetrics")
+      fetch(`${process.env.NEXT_PUBLIC_serverUrl}/locmetrics/l`)
         .then((response) => response.json())
         .then((responseData) => {
           const polygonCoordinates = responseData.data.map((item) => ({

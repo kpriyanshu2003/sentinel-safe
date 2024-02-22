@@ -65,6 +65,7 @@ export async function updateLocMetrics(req: Request, res: Response) {
       lumen,
       latitude,
       longitude,
+      sentiment,
     }: LocMetrics = req.body;
     // if (
     //   !avgSpeed ||
@@ -82,6 +83,7 @@ export async function updateLocMetrics(req: Request, res: Response) {
     //         "Field Required: avgSpeed, peopleCount, campusName, lumen, latitude, longitude, id"
     //       )
     //     );
+    const risk = getRisk(avgSpeed, peopleCount, lumen);
     const speedPeople = await prisma.locMetrics.update({
       where: {
         id: req.params.id,
@@ -90,6 +92,57 @@ export async function updateLocMetrics(req: Request, res: Response) {
         avgSpeed: avgSpeed,
         peopleCount: peopleCount,
         lumen: lumen,
+        riskRating: risk,
+        latitude: latitude,
+        longitude: longitude,
+        color: getColor(risk),
+        campusName: campusName,
+        sentiment: sentiment,
+      },
+    });
+    // if (!speedPeople)
+    //   return res
+    //     .status(400)
+    //     .send(new CustomResponse("Location Metrics not updated"));
+    res
+      .status(201)
+      .send(new CustomResponse("Location Metrics updated", speedPeople));
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(new CustomResponse("Internal Server Error"));
+  }
+}
+
+export async function updateLocMetricsByCampus(req: Request, res: Response) {
+  try {
+    const {
+      avgSpeed,
+      peopleCount,
+      lumen,
+      latitude,
+      longitude,
+      sentiment,
+    }: LocMetrics = req.body;
+    // if (!avgSpeed || !peopleCount || !lumen || !req.params.id)
+    //   return res
+    //     .status(400)
+    //     .send(
+    //       new CustomResponse(
+    //         "Field Required: avgSpeed, peopleCount, lumen, campusName"
+    //       )
+    //     );
+    const risk = getRisk(avgSpeed, peopleCount, lumen);
+    const speedPeople = await prisma.locMetrics.updateMany({
+      where: { campusName: req.params.id },
+      data: {
+        avgSpeed: avgSpeed,
+        peopleCount: peopleCount,
+        lumen: lumen,
+        riskRating: risk,
+        latitude: latitude,
+        longitude: longitude,
+        color: getColor(risk),
+        sentiment: sentiment,
       },
     });
     // if (!speedPeople)
@@ -223,11 +276,11 @@ export async function getLocMetricsByCoordinates(req: Request, res: Response) {
 // get the first element of each group
 export async function getLatestData(req: Request, res: Response) {
   try {
-    const speedPeople = await prisma.locMetrics.groupBy({
-      by: ["campusName", "updatedAt"],
-      _count: { _all: true },
-      orderBy: { updatedAt: "desc" },
-      take: 1,
+    const speedPeople = await prisma.locMetrics.findMany({
+      orderBy: {
+        updatedAt: "desc", // Sort by updatedAt field in descending order
+      },
+      distinct: ["campusName"], // Retrieve distinct campus names
     });
     if (!speedPeople)
       return res

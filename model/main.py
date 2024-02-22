@@ -1,27 +1,12 @@
-from dotenv import load_dotenv
-import requests
-import os
-import json
-from function.brightness import is_light_or_dark
-from function.counter import count_people_in_video
+import schedule
+import time
+from sentiment import sentiment
+from locMetrics import update_locmetrics
 
-load_dotenv()
-# Gets all codes from the server, runs model on each geoCode, and posts a request to the server
-allGeoCode = requests.get(f"{os.getenv('SERVER_URL')}/geo")
-geoCodeData = allGeoCode.json()["data"]
-for geoCodes in geoCodeData:
-    print(geoCodes)
-    lightSts = is_light_or_dark("resource/night-photo.png", 0.4, "average")
-    count = count_people_in_video("resource/CrowdVideo.mp4", "resource/yolov5su.pt")
-    r = requests.post(
-        f'{os.getenv("SERVER_URL")}/locmetrics',
-        json={
-            "lumen": bool(lightSts),
-            "peopleCount": int(json.loads(count)["peopleCount"]),
-            "avgSpeed": float(json.loads(count)["avgSpeed"]),
-            "campusName": geoCodes["campusName"],
-            "latitude": float(geoCodes["latitude"]),
-            "longitude": float(geoCodes["longitude"]),
-        },
-    )
-    print(r.json())
+
+schedule.every(30).minutes.do(sentiment)
+schedule.every(1).hours.do(update_locmetrics)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)

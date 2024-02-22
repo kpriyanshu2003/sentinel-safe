@@ -8,7 +8,7 @@ import Accordion from "@mui/material/Accordion";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import addReviews, { getReviews } from "../../app/lib/addReviews";
+import addReviews, { getReviews } from "../../lib/addReviews";
 import toast, { Toaster } from "react-hot-toast";
 import Metrics from "./metrics";
 import Rating from "@mui/material/Rating";

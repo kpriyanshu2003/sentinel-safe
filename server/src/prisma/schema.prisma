@@ -19,14 +19,14 @@ model User {
 
 model LocMetrics {
   id          String   @id @default(uuid())
-  campusName  String   @unique
+  campusName  String
   latitude    String   @default("0")
   longitude   String   @default("0")
   lumen       Boolean  @default(false)
   peopleCount Int      @default(0)
   avgSpeed    Decimal  @default(0)
   riskRating  Int      @default(0)
-  color       String   @default("yellow")
+  color       String   @default("#63d963")
   sentiment   Decimal  @default(2.5)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

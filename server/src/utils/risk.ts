@@ -3,9 +3,9 @@ export const getRisk = (
   people: number,
   lumen: boolean
 ): number => {
-  let riskRating = 0;
-  if (speed > 100) riskRating += 1;
-  if (people > 10) riskRating += 1;
-  if (lumen === true) riskRating += 1;
-  return Math.trunc(riskRating);
+  const offset = 1;
+  if (people <= 5) people *= 4;
+  let riskRating = people / (+lumen + 1 + (1 / speed + 1));
+  riskRating = 4 / (1 + Math.exp(-(riskRating - offset))) + 1;
+  return riskRating;
 };
