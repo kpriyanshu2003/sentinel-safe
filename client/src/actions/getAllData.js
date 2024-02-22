@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import useServerFetchData from "./hooks/hook1";
 
 const ClientComponent = dynamic(
-  () => import("../../components/Dashboard/Location"),
+  () => import("../components/Dashboard/Location"),
   { ssr: false }
 );
 

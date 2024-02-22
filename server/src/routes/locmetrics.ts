@@ -9,6 +9,7 @@ import {
   getLocMetricsByRisk,
   getLocMetricsbyTime,
   updateLocMetrics,
+  updateLocMetricsByCampus,
 } from "../controller/LocMetrics";
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.get("/t/:id", getLocMetricsbyTime);
 router.get("/o/", getLocMetricsByCoordinates);
 router.get("/l/", getLatestData);
 router.post("/", createLocMetrics);
+router.patch("/c/:id", updateLocMetricsByCampus);
 router.patch("/:id", updateLocMetrics);
 router.delete("/:id", deleteLocMetrics);
 

@@ -11,7 +11,7 @@ export const useStore = create((set) => ({
 
 export const getMetricsHighlighted = create((set) => ({
   fetchData: async (sourceName) => {
-    const response = await fetch(`${url}/locmetrics`);
+    const response = await fetch(`${url}/locmetrics/l`);
     const data = await response.json();
     const metrics = data.data;
     metrics.map((info) => {
