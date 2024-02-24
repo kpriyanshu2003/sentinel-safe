@@ -15,7 +15,7 @@ const metrics = ({ peopleCount, avgSpeed }) => {
       </div>
       <div className="flex gap-2 items-center justify-center ">
         <DirectionsWalkIcon className="text-green-400" />
-        <span>{avgSpeed}</span>
+        <span>{avgSpeed} kmph</span>
       </div>
     </>
   );

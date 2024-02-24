@@ -104,7 +104,7 @@ const Location = ({ data }) => {
               layout: {},
               paint: {
                 "fill-color": coordinatesColor[index],
-                "fill-opacity": 0.6,
+                "fill-opacity": 0.5,
               },
             });
 
