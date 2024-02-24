@@ -30,11 +30,11 @@ const Sidebar = ({
   const [reviews, setReviews] = useState();
   const [value, setValue] = useState(2.5);
   const labels = {
-    1: "Not Safe+",
-    2: "Poor",
+    5: "Risky",
+    4: "Poor",
     3: "Neutral",
-    4: "Safe",
-    5: "Excellent",
+    2: "Safe",
+    1: "Excellent",
   };
 
   const [inputValue, setInputValue] = useState({
@@ -99,7 +99,8 @@ const Sidebar = ({
           />
         ) : (
           <Typography>
-            Click on the highlighted area to fetch current metrics !{" "}
+            Click on the highlighted area to fetch current metrics of the campus
+            !{" "}
           </Typography>
         )}
       </div>
@@ -118,20 +119,26 @@ const Sidebar = ({
           id="panel1-header"
           className="outline-transparent border-transparent  overflow-y-scroll"
         >
-          Overview
+          Overview{" "}
+          {longitude && metrics.avgSpeed ? (
+            <span>&nbsp; of {metrics.campusName}</span>
+          ) : (
+            ""
+          )}
         </AccordionSummary>
         <AccordionDetails
           className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
           style={{ background: "#f1f1f194" }}
         >
           <Typography className="font-extralight flex items-center justify-center gap-1">
-            {longitude ? (
+            {longitude && metrics.avgSpeed ? (
               <>
                 {" "}
                 <Rating
                   name="read-only"
-                  value={value}
+                  value={metrics.riskRating}
                   precision={0.1}
+                  sx={{ color: "red" }}
                   readOnly
                 />
                 {labels[Math.floor(metrics.sentiment)]}
@@ -139,7 +146,7 @@ const Sidebar = ({
             ) : (
               "Click on the highlighted area to fetch"
             )}{" "}
-            safety conditions
+            conditions
           </Typography>
         </AccordionDetails>
       </Accordion>

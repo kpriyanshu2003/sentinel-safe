@@ -12,7 +12,9 @@ const Location = ({ data }) => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_mapAccessToken;
     const map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/outdoors-v12",
+      // style: "mapbox://styles/mapbox/outdoors-v12",
+      style: "mapbox://styles/mapbox/satellite-streets-v12",
+
       center: [85.8161, 20.3555], // starting position [lng, lat]
       zoom: 15,
       // maxBounds: boundsN
@@ -102,7 +104,7 @@ const Location = ({ data }) => {
               layout: {},
               paint: {
                 "fill-color": coordinatesColor[index],
-                "fill-opacity": 0.4,
+                "fill-opacity": 0.5,
               },
             });
 
@@ -118,6 +120,10 @@ const Location = ({ data }) => {
               state.fetchData(sourceName);
               // If no match found
               console.log("No match found for the clicked coordinates.");
+            });
+            map.on("click", function (e) {
+              const centerCoordinates = e.lngLat.toArray();
+              console.log("clciked:", centerCoordinates);
             });
           });
         })
