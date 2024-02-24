@@ -130,9 +130,10 @@ const Sidebar = ({
           className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
           style={{ background: "#f1f1f194" }}
         >
-          <Typography className="font-extralight flex items-center justify-center gap-1">
+          <Typography className="font-extralight flex  gap-1">
             {longitude && metrics.avgSpeed ? (
               <>
+                risk rating:  {" "}
                 {" "}
                 <Rating
                   name="read-only"
@@ -141,12 +142,13 @@ const Sidebar = ({
                   sx={{ color: "red" }}
                   readOnly
                 />
+               
                 {labels[Math.floor(metrics.sentiment)]}
               </>
             ) : (
               "Click on the highlighted area to fetch"
             )}{" "}
-            conditions
+          
           </Typography>
         </AccordionDetails>
       </Accordion>
@@ -158,7 +160,7 @@ const Sidebar = ({
         )}
         <div
           className={`cursor-default overflow-y-scroll my-2 ${
-            expanded ? "lg:h-64" : "lg:h-96 "
+            expanded ? "lg:h-full" : "lg:h-96 "
           }`}
         >
           {reviews ? (

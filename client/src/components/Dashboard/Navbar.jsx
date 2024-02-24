@@ -23,7 +23,6 @@ const Navbar = () => {
       setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -79,10 +78,10 @@ const Navbar = () => {
           }}
         >
           <Card className="p-3 border-black rounded border text-sm">
-            username: <span>{userDetails.displayName}</span>
+            username:{" "}
+            {userDetails.displayName!=null && <span>{userDetails.displayName}</span>}
             <br></br>
-            Email:
-            {userDetails.email}
+            Email:{userDetails.email && <span>{userDetails.email}</span>}
           </Card>
         </Popover>
 
