@@ -30,11 +30,11 @@ const Sidebar = ({
   const [reviews, setReviews] = useState();
   const [value, setValue] = useState(2.5);
   const labels = {
-    5: "Risky",
-    4: "Poor",
+    1: "Risky",
+    2: "Poor",
     3: "Neutral",
-    2: "Safe",
-    1: "Excellent",
+    4: "Safe",
+    5: "Excellent",
   };
 
   const [inputValue, setInputValue] = useState({
@@ -133,22 +133,18 @@ const Sidebar = ({
           <Typography className="font-extralight flex  gap-1">
             {longitude && metrics.avgSpeed ? (
               <>
-                risk rating:  {" "}
-                {" "}
+                safety rating:{" "}
                 <Rating
                   name="read-only"
                   value={metrics.riskRating}
                   precision={0.1}
-                  sx={{ color: "red" }}
                   readOnly
                 />
-               
                 {labels[Math.floor(metrics.sentiment)]}
               </>
             ) : (
               "Click on the highlighted area to fetch"
             )}{" "}
-          
           </Typography>
         </AccordionDetails>
       </Accordion>
