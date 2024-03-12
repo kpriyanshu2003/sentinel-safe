@@ -1,10 +1,9 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import Card from "@mui/material/Card";
 const Reviews = ({ review }) => {
   return (
     <div
-      className="bg-transparent text-white border border-gray-600 rounded-lg mt-3 md-3 p-3"
+      className="bg-transparent w-full h-fit text-white border border-gray-600 rounded-lg mt-3 md-3 p-3"
     >
       <div className="w-full flex justify-between ">
         <Typography className="font-bold text-sm">{review.name}</Typography>
