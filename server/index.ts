@@ -7,7 +7,6 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import { PrismaClient } from "@prisma/client";
 import helmet from "helmet";
-
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3300;

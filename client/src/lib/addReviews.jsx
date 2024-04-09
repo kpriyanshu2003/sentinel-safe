@@ -16,7 +16,7 @@ const addReviews = async (props) => {
       email: props.email,
       name: props.name,
       review: props.review,
-      sentiment: null,
+      sentiment: 0,
       updatedAt: new Date(),
     });
 
