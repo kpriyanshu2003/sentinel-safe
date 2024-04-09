@@ -97,9 +97,9 @@ export default function Authentication() {
   };
 
   return (
-    <div className="h-svh grid place-items-center bg-gray-100">
+    <div className="h-svh grid place-items-center bg-gray-900">
       <div
-        className="flex flex-1 flex-col justify-center  p-10 lg:px-8  bg-white  rounded h-screen w-screen lg:h-4/5 lg:w-1/3 lg:shadow-xl"
+        className="flex flex-1 flex-col justify-center  bg-gray-300 p-10 lg:px-8    rounded h-screen w-screen lg:h-4/5 lg:w-1/3 lg:shadow-xl"
         style={{ minWidth: "400px" }}
       >
         <Toaster />
@@ -117,7 +117,7 @@ export default function Authentication() {
           </h2>
         </div>
         <div className="mt-2 md:mx-auto md:w-full md:max-w-sm ">
-          <form onSubmit={(e) => handleNext(e)}>
+          {/* <form onSubmit={(e) => handleNext(e)}>
             <div>
               <label
                 htmlFor="email"
@@ -194,10 +194,10 @@ export default function Authentication() {
                 {!signUp ? "Sign In" : "Sign Up"}
               </button>
             </div>
-          </form>
+          </form> */}
           <button
             onClick={handleGoogleAuth}
-            className="flex hover:shadow-md item-center gap-3 justify-center w-full p-2 mt-3 border-gray-100 border-2 transition duration-300 shadow-md font-semibold text-sm text-gray-400 hover:shadow-gray-400"
+            className="flex hover:shadow-md item-center gap-3 justify-center w-full p-2 mt-3 bg-green-800 text-white border-gray-100 border-2 transition duration-300 shadow-md font-semibold text-sm  hover:shadow-gray-400"
           >
             <Image src="/google.png" width={20} height={20}></Image> Sign in
             with Google
@@ -208,7 +208,7 @@ export default function Authentication() {
             onClick={() => setSignUp(!signUp)}
           >
             {signUp ? "Already have an account? " : "Don't have an account?  "}
-            <span className="font-semibold leading-6 text-green-400 hover:text-green-600 cursor-pointer">
+            <span className="font-semibold leading-6 text-green-800 hover:text-green-600 cursor-pointer">
               {signUp ? "Sign In" : "Sign Up"}
             </span>
           </div>
