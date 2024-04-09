@@ -140,7 +140,7 @@ const Sidebar = ({
                   precision={0.1}
                   readOnly
                 />
-                {labels[Math.floor(metrics.sentiment)]}
+                {labels[metrics.riskRating]}
               </>
             ) : (
               "Click on the highlighted area to fetch"
